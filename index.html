@@ -78,6 +78,15 @@ input:focus,select:focus{border-color:var(--g500)}
 .total .sub div{font-size:13px;color:var(--g200)}
 .total .sub b{display:block;color:#fff;font-size:17px}
 .range{margin-top:10px;font-size:13px;color:var(--g200)}
+.cert{display:flex;gap:10px;align-items:flex-start;margin-top:12px;border-radius:12px;padding:11px 13px;font-size:13.5px;border:1px solid}
+.cert b{display:block;font-size:14px}
+.cert .dotc{flex:0 0 12px;height:12px;border-radius:50%;margin-top:4px}
+.cert.alta{background:#e9f6ee;border-color:#9ad6b4;color:#11402f}.cert.alta .dotc{background:#2e9466}
+.cert.media{background:#fff8e6;border-color:#f1d48a;color:#6b4a00}.cert.media .dotc{background:#d9a21b}
+.cert.baja{background:#fdecea;border-color:#f2b8b0;color:#7a1f12}.cert.baja .dotc{background:#c8432f}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.alta{background:#e9f6ee;color:#17573f}.pill.media{background:#fff3d6;color:#7a5600}.pill.baja{background:#fde4e0;color:#8f2615}
+.est{font-size:11px;font-weight:600;color:var(--muted);background:var(--g100);padding:1px 6px;border-radius:6px;margin-left:4px}
 
 .src{margin-top:16px}
 .srow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:center}
@@ -289,6 +298,7 @@ footer a{color:var(--g300)}
         <div class="range" id="tRange"></div>
       </div>
 
+      <div class="cert" id="cert"></div>
       <div class="adjbox" id="adjbox"></div>
       <div class="src" id="srcList"></div>
 
@@ -331,7 +341,7 @@ footer a{color:var(--g300)}
   <!-- MARKET TABLE -->
   <section class="card mkt">
     <h2>Pizarra de precios</h2>
-    <p class="lead">Promedios de los últimos remates y de la grilla semanal de la referencia. Vacunos de reposición en US$/kg en pie salvo indicación.</p>
+    <p class="lead">Promedios de los últimos remates y de la referencia semanal. Vacunos de reposición en US$/kg en pie salvo indicación. La columna Certeza indica cuántas fuentes respaldan cada precio y si coinciden.</p>
     <div class="cards4" id="kpis"></div>
     <div class="scroll"><table class="tbl" id="tbl"></table></div>
     <p class="note">Referencia semanal: precios de referencia del mercado (gordo en US$/kg carcasa). Remates 1, 2 y 3: promedios de remates por pantalla de noviembre 2026. “—” = sin oferta o sin dato en ese remate; el promedio se calcula con las fuentes disponibles.</p>
@@ -532,7 +542,8 @@ function renderHist(){
   $("hCats").innerHTML = L.map(c=>`<button class="chip ${c.id===H.cat?"on":""}" data-id="${c.id}">${c.n}</button>`).join("");
   $("hCats").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{H.cat=b.dataset.id; renderHist();});
   const c = L.find(x=>x.id===H.cat), s = HIST[H.cat];
-  $("hTitle").textContent = c.n + " · " + c.d;
+  const ch = certHist(s.d, s.f);
+  $("hTitle").innerHTML = c.n + " · " + c.d + ` <span class="pill ${ch.nivel}" style="vertical-align:middle;margin-left:6px">${CERT_TXT[ch.nivel]}</span>`;
   const unit = c.u==="cab"?"US$/cab":c.u==="carc"?"US$/kg carcasa":"US$/kg en pie";
   const dec = c.u==="cab"?0:2;
   const d = s.d, first=d[0][1], last=d[d.length-1][1];
@@ -575,7 +586,7 @@ function renderHist(){
   $("hNote").textContent = (s.f==="Referencia semanal"
     ? "Fuente: precios de referencia semanales del mercado."
     : "Fuente: promedios de remates por pantalla (pueden variar por calidad y peso de la oferta de cada remate).")
-    + (d.length<3?" Hay pocos datos para esta categoría; se irán sumando con cada actualización.":"");
+    + " Certeza: " + ch.txt + ".";
 }
 
 function showTab(t){
@@ -622,6 +633,24 @@ function onCat(){
   calc();
 }
 
+/* Certeza: cuántas fuentes hay y cuánto difieren entre sí */
+function certeza(vals){
+  const v = vals.filter(x=>x!=null);
+  const n = v.length;
+  if(!n) return {nivel:"baja", n:0, disp:0};
+  const avg = v.reduce((a,b)=>a+b,0)/n;
+  const disp = n>1 ? (Math.max(...v)-Math.min(...v))/avg*100 : 0;
+  let nivel = n>=3 ? (disp<=10?"alta":"media") : n===2 ? (disp<=10?"media":"baja") : "baja";
+  return {nivel, n, disp};
+}
+const CERT_TXT = {alta:"Certeza alta", media:"Certeza media", baja:"Certeza baja"};
+function certHist(d, f){
+  const n=d.length;
+  if(f==="Referencia semanal" && n>=6) return {nivel:"alta", txt:`${n} datos semanales de la misma referencia`};
+  if(n>=4) return {nivel:"media", txt:`${n} datos${f==="Remates"?" de distintos remates (pueden variar por calidad de la oferta)":""}`};
+  return {nivel:"baja", txt:`solo ${n} dato${n>1?"s":""}; sirve de orientación, no muestra una tendencia confiable`};
+}
+
 function curva(c, peso){
   const k = CURVA[c.id];
   if(!k || !peso) return 1;
@@ -651,11 +680,11 @@ function calc(){
   $("tags").innerHTML = com_.items.map(x=>`<span class="tag ${x.v>=0?"up":"dn"}">${x.v>=0?"▲":"▼"} ${x.t} ${x.v>=0?"+":""}${fmt(x.v,1)}%</span>`).join("");
   const pct = f=>{const v=(f-1)*100; return `<b class="${v>=0?"up":"dn"}">${v>=0?"+":""}${fmt(v,1)}%</b>`;};
   $("adjbox").innerHTML =
-    (c.u==="kg"?`<div class="r"><span>Curva de peso (${fmt(peso)} kg)</span>${pct(fw)}</div>`:"")+
-    `<div class="r"><span>Raza y calidad</span>${pct(fr*fc)}</div>`+
-    (c.preg?`<div class="r"><span>Preñez ${S.mes} meses</span>${pct(fp)}</div>`:"")+
-    `<div class="r"><span>Comentario del lote</span>${pct(com_.f)}</div>`+
-    `<div class="r"><span>Tamaño del lote (${fmt(cab)} cab.)</span>${pct(fl)}</div>`;
+    (c.u==="kg"?`<div class="r"><span>Curva de peso (${fmt(peso)} kg) <span class="est">estimado</span></span>${pct(fw)}</div>`:"")+
+    `<div class="r"><span>Raza y calidad <span class="est">estimado</span></span>${pct(fr*fc)}</div>`+
+    (c.preg?`<div class="r"><span>Preñez ${S.mes} meses <span class="est">estimado</span></span>${pct(fp)}</div>`:"")+
+    `<div class="r"><span>Comentario del lote <span class="est">estimado</span></span>${pct(com_.f)}</div>`+
+    `<div class="r"><span>Tamaño del lote (${fmt(cab)} cab.) <span class="est">estimado</span></span>${pct(fl)}</div>`;
   const own = parseFloat(($("own").value||"").toString().replace(",", "."));
 
   // valor por cabeza por fuente
@@ -681,6 +710,14 @@ function calc(){
     headAvg = c.u==="cab" ? own : c.u==="kg" ? own*peso : own*peso*rend;
   }
   const total = headAvg*cab;
+  const ct = certeza(Object.values(c.p));
+  const ctxt = ct.n===1
+    ? `Basado en <b style="display:inline">una sola fuente</b>. Tomalo como orientación.`
+    : `${ct.n} fuentes; diferencia entre la más baja y la más alta: ${fmt(ct.disp,0)}%.`;
+  $("cert").className = "cert "+(usingOwn?"media":ct.nivel);
+  $("cert").innerHTML = usingOwn
+    ? `<span class="dotc"></span><div><b>Precio propio</b>El valor usa el precio que cargaste vos, no el de mercado.</div>`
+    : `<span class="dotc"></span><div><b>${CERT_TXT[ct.nivel]} en el precio base</b>${ctxt} Los ajustes por raza, calidad, preñez, comentario, peso y tamaño del lote son <b style="display:inline">estimaciones propias</b>, no datos publicados por los remates.</div>`;
 
   $("tLbl").textContent = usingOwn ? "Con tu precio" : `Promedio de ${ok.length} fuente${ok.length>1?"s":""}`;
   $("tBig").textContent = usd(total);
@@ -717,13 +754,13 @@ function calc(){
   $("noteTxt").textContent = notes.join(" ");
 
   window._summary = `🐂 CuántoLaVenta – ${c.n}\n${cab} cab.${c.u!=="cab"?` × ${peso} kg`:""} · ${S.raza} · ${S.cal}${c.preg?` · preñez ${S.mes} meses`:""}${com_.items.length?`\n📝 ${com_.items.map(x=>x.t).join(", ")}`:""}\nValor estimado: ${usd(total)} (${usd(headAvg)}/cab${c.u!=="cab"?`, ${usd(unitAvg,2)}/kg`:""})\n` +
-    rows.filter(r=>r.v!=null).map(r=>`• ${SOURCES[r.s].name}: ${usd(r.v*cab)}`).join("\n") + `\nPrecios al ${UPDATED}`;
+    rows.filter(r=>r.v!=null).map(r=>`• ${SOURCES[r.s].name}: ${usd(r.v*cab)}`).join("\n") + `\n${CERT_TXT[ct.nivel]} (${ct.n} fuente${ct.n>1?"s":""}) · Precios al ${UPDATED}`;
 }
 
 /* Pizarra */
 function renderTable(){
   const all = [...VAC.map(c=>({...c,esp:"Vacunos"})), ...OVI.map(c=>({...c,esp:"Ovinos"}))];
-  const head = `<tr><th>Categoría</th><th>Ref. semanal</th><th>Remate 1</th><th>Remate 2</th><th>Remate 3</th><th>Promedio</th></tr>`;
+  const head = `<tr><th>Categoría</th><th>Ref. semanal</th><th>Remate 1</th><th>Remate 2</th><th>Remate 3</th><th>Promedio</th><th>Certeza</th></tr>`;
   let lastEsp = "";
   const body = all.map(c=>{
     const d = c.u==="cab"?0:2;
@@ -732,8 +769,8 @@ function renderTable(){
     const avg = ok.reduce((a,b)=>a+b,0)/ok.length;
     const unit = c.u==="cab"?"US$/cab":c.u==="carc"?"US$/kg carc.":"US$/kg";
     let sep = "";
-    if(c.esp!==lastEsp){ lastEsp=c.esp; sep=`<tr><td colspan="6" style="font-weight:800;color:var(--g700);padding-top:16px">${c.esp}</td></tr>`; }
-    return sep + `<tr><td>${c.n} <span class="u">${unit}</span></td>${vals.map(v=>`<td>${v==null?'<span class="u">—</span>':fmt(v,d)}</td>`).join("")}<td><b>${fmt(avg,d)}</b></td></tr>`;
+    if(c.esp!==lastEsp){ lastEsp=c.esp; sep=`<tr><td colspan="7" style="font-weight:800;color:var(--g700);padding-top:16px">${c.esp}</td></tr>`; }
+    return sep + `<tr><td>${c.n} <span class="u">${unit}</span></td>${vals.map(v=>`<td>${v==null?'<span class="u">—</span>':fmt(v,d)}</td>`).join("")}<td><b>${fmt(avg,d)}</b></td><td>${(()=>{const k=certeza(vals);return `<span class="pill ${k.nivel}" title="${k.n} fuente(s), dispersión ${fmt(k.disp,0)}%">${k.nivel==="alta"?"Alta":k.nivel==="media"?"Media":"Baja"} · ${k.n}</span>`})()}</td></tr>`;
   }).join("");
   $("tbl").innerHTML = head + body;
 
