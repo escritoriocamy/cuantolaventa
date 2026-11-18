@@ -15,9 +15,10 @@
   --r:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--g50);color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--g50);color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
+html{overflow-x:hidden}
 button,input,select{font:inherit;color:inherit}
-.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 18px}
 
 /* Header */
 header{background:linear-gradient(135deg,var(--g900),var(--g700));color:#fff;padding:26px 0 70px;position:relative;overflow:hidden}
@@ -39,7 +40,9 @@ main{margin-top:-48px;position:relative;z-index:1;padding-bottom:40px}
 .seg button{flex:1;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-weight:600;cursor:pointer;color:var(--g700);font-size:15px}
 .seg button.on{background:var(--white);color:var(--g900);box-shadow:0 2px 8px rgba(11,46,34,.1)}
 
-.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:20px}
+.grid>*,.card{min-width:0}
+svg{max-width:100%}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 .form{padding:22px}
 .form h2,.res h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:14px}
@@ -140,6 +143,44 @@ textarea:focus{border-color:var(--g500)}
 .tip b{font-size:14px}
 .hcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .linkbtn{border:0;background:none;color:var(--g700);font-weight:700;cursor:pointer;font-size:13.5px;margin-top:10px;text-decoration:underline}
+.search{position:relative;margin-bottom:12px}
+.search input{width:100%;padding:13px 14px 13px 42px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;outline:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%235b7368' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E") no-repeat 14px center}
+.search input:focus{border-color:var(--g500)}
+.sres{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(11,46,34,.14);z-index:20;overflow:hidden}
+.sres button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--g100);font-size:15px}
+.sres button:hover,.sres button.act{background:var(--g100)}
+.sres button small{display:block;color:var(--muted);font-size:12.5px}
+.sres .none{padding:12px 14px;color:var(--muted);font-size:14px}
+.histgrid{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px;margin-top:16px}
+.histgrid .hcats{flex-direction:column;flex-wrap:nowrap;margin-top:8px;max-height:520px;overflow:auto}
+.histgrid .hcats .chip{text-align:left;border-radius:10px}
+@media(max-width:860px){.histgrid{grid-template-columns:minmax(0,1fr)}.histgrid .hcats{flex-direction:row;flex-wrap:wrap;max-height:none}}
+@media(max-width:600px){
+  .wrap{padding:0 12px}
+  header{padding:18px 0 58px}
+  .brand h1{font-size:19px}
+  .hero{margin-top:14px}
+  .hero p{font-size:14.5px}
+  main{margin-top:-40px}
+  .tabs{max-width:none}
+  .tabs button{font-size:14px;padding:10px 8px}
+  .form,.res,section.mkt,.hist{padding:16px}
+  .res{position:static}
+  .cats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cat{padding:9px}
+  .cat b{font-size:13.5px}
+  .total{padding:16px}
+  .total .big{font-size:30px}
+  .total .sub{gap:12px}
+  .total .sub b{font-size:15px}
+  .kpi .v{font-size:18px}
+  .kpi{padding:10px}
+  .mkt h2,.hist h2{font-size:18px}
+  .tbl{font-size:12.5px}
+  .tbl th,.tbl td{padding:7px 5px}
+  .months button{font-size:13px;padding:7px 0}
+  .btns{flex-direction:column}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 footer{background:var(--g900);color:var(--g200);padding:26px 0;font-size:13px}
 footer a{color:var(--g300)}
@@ -179,6 +220,7 @@ footer a{color:var(--g300)}
 
       <div style="margin-top:20px">
         <h2>1 · Categoría</h2>
+        <div class="search"><input id="q" type="search" autocomplete="off" placeholder="Escribí la categoría: vaca preñada, novillo holando…"><div class="sres hide" id="qres"></div></div>
         <div class="cats" id="cats"></div>
       </div>
 
@@ -271,10 +313,18 @@ footer a{color:var(--g300)}
       <button class="on" data-v="vac">🐄 Vacunos</button>
       <button data-v="ovi">🐑 Ovinos</button>
     </div>
-    <div class="hcats" id="hCats"></div>
-    <div class="cards4" id="hKpis"></div>
-    <div class="chart" id="hChart"><div class="tip" id="tip"></div></div>
-    <p class="note" id="hNote"></p>
+    <div class="histgrid">
+      <div>
+        <div class="search" style="margin-bottom:6px"><input id="hq" type="search" autocomplete="off" placeholder="Buscar categoría…"><div class="sres hide" id="hqres"></div></div>
+        <div class="hcats" id="hCats"></div>
+      </div>
+      <div style="min-width:0">
+        <h3 id="hTitle" style="font-size:17px;font-weight:800;color:var(--g800)"></h3>
+        <div class="cards4" id="hKpis" style="margin-top:10px"></div>
+        <div class="chart" id="hChart"><div class="tip" id="tip"></div></div>
+        <p class="note" id="hNote"></p>
+      </div>
+    </div>
   </section>
 
   <div id="vCalc2">
@@ -331,7 +381,7 @@ const VAC = [
     p:{r1:3.38, r2:3.47}},
   {id:"vinv", n:"Vacas de invernada", d:"Vacías, para engorde", u:"kg", peso:380,
     p:{ref:2.63, r1:2.78, r2:2.77, r3:2.65}},
-  {id:"vpre", n:"Vacas preñadas", d:"Vientres con diagnóstico", u:"cab", preg:true,
+  {id:"vpre", n:"Vacas preñadas", d:"Con diagnóstico, incluye próximas", u:"cab", preg:true,
     p:{r1:1383.88, r2:1276, r3:1413}},
   {id:"vqpre", n:"Vaquillonas preñadas", d:"Primera preñez", u:"cab", preg:true,
     p:{r1:1383.88, r2:1327, r3:1413}},
@@ -339,7 +389,7 @@ const VAC = [
     p:{r1:1154.95, r2:1130, r3:1045}},
   {id:"cria", n:"Piezas de cría", d:"Vaca con ternero al pie", u:"cab",
     p:{r1:827.32, r2:827}},
-  {id:"holando", n:"Holando", d:"Machos de reposición", u:"kg", peso:300,
+  {id:"holando", n:"Novillos Holando", d:"Machos Holando de recría", u:"kg", peso:300,
     p:{r1:3.25, r2:2.95}},
   {id:"toro", n:"Toros", d:"Reproductores", u:"cab",
     p:{r3:3080}},
@@ -482,6 +532,7 @@ function renderHist(){
   $("hCats").innerHTML = L.map(c=>`<button class="chip ${c.id===H.cat?"on":""}" data-id="${c.id}">${c.n}</button>`).join("");
   $("hCats").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{H.cat=b.dataset.id; renderHist();});
   const c = L.find(x=>x.id===H.cat), s = HIST[H.cat];
+  $("hTitle").textContent = c.n + " · " + c.d;
   const unit = c.u==="cab"?"US$/cab":c.u==="carc"?"US$/kg carcasa":"US$/kg en pie";
   const dec = c.u==="cab"?0:2;
   const d = s.d, first=d[0][1], last=d[d.length-1][1];
@@ -495,7 +546,7 @@ function renderHist(){
   ].map(x=>`<div class="kpi"><div class="k">${x.k}</div><div class="v">${x.v}</div><div class="d">${x.d}</div></div>`).join("");
 
   // SVG
-  const W=760,Hh=300,pl=58,pr=18,pt=18,pb=38;
+  const W=Math.max(300,Math.min(1000,($("hChart").clientWidth||760)-16)),Hh=W<520?230:300,pl=52,pr=16,pt=18,pb=36;
   const t = d.map(x=>new Date(x[0]).getTime());
   const t0=Math.min(...t), t1=Math.max(...t), span=Math.max(t1-t0,1);
   let lo=mn, hi=mx; const pad=(hi-lo||hi*0.1)*0.25; lo-=pad; hi+=pad;
@@ -505,7 +556,7 @@ function renderHist(){
   for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4, y=Y(v);
     g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="#d6e7dd" stroke-dasharray="${i?"3 4":"0"}"/><text x="${pl-8}" y="${y+4}" text-anchor="end" font-size="12" fill="#5b7368">${fmt(v,dec)}</text>`;}
   const ticks = d.length<=6 ? d.map(x=>x[0]) : [d[0][0], d[Math.floor(d.length/3)][0], d[Math.floor(2*d.length/3)][0], d[d.length-1][0]];
-  ticks.forEach(s=>{const x=X(new Date(s).getTime()); g+=`<text x="${x}" y="${Hh-12}" text-anchor="middle" font-size="12" fill="#5b7368">${fd(s)}</text>`;});
+  let lastX=-999; ticks.forEach(s=>{const x=X(new Date(s).getTime()); if(x-lastX<78) return; lastX=x; g+=`<text x="${x}" y="${Hh-12}" text-anchor="middle" font-size="12" fill="#5b7368">${fd(s)}</text>`;});
   const pts = d.map(x=>[X(new Date(x[0]).getTime()),Y(x[1])]);
   const line = pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
   const area = d.length>1 ? line+` L${pts[pts.length-1][0]},${Hh-pb} L${pts[0][0]},${Hh-pb} Z` : "";
@@ -721,6 +772,57 @@ renderChips("razas", RAZAS_VAC, "raza");
 renderChips("calidad", CALIDAD, "cal");
 renderMonths();
 renderTable();
+/* ===== Buscador de categorías ===== */
+const ALIAS = {
+  ternero:"terneros machos destete ternero macho", ternera:"terneras hembras ternera hembra",
+  mixto:"terneros y terneras mixto lote mixto", nov12:"novillo novillos 1 2 años novillito sobreaño recria",
+  nov23:"novillo novillos 2 3 años invernada", nov3:"novillo novillos mas de 3 años pesado viejo",
+  vaq12:"vaquillona vaquillonas 1 2 años sin servicio", vaq2:"vaquillona vaquillonas mas de 2 años sin servicio",
+  vinv:"vaca vacas invernada vacia vacía flaca refugo engorde", vpre:"vaca vacas preñada prenada proxima próxima parir vientre vientres preñez",
+  vqpre:"vaquillona vaquillonas preñada prenada primeriza proxima", ento:"entorada entorado entoradas con toro vientre servicio",
+  cria:"piezas de cria vaca con ternero al pie parida pariciones cría", holando:"holando novillo holando lechero macho holando tambo",
+  toro:"toro toros reproductor", gnov:"novillo gordo faena frigorifico frigorífico carne", gvaca:"vaca gorda faena frigorifico",
+  gvaq:"vaquillona gorda faena", cordero:"cordero corderos corderas reposicion", borrego:"borrego borregos borregas dos dientes",
+  ovcria:"oveja ovejas de cria encarnerada encarneradas", gcord:"cordero gordo pesado faena", gborr:"borrego gordo faena",
+  gcap:"capon capones capón faena", goveja:"oveja gorda refugo faena"
+};
+const norm = s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ñ/g,"n");
+function buscar(q){
+  const words = norm(q).split(/\s+/).filter(Boolean);
+  if(!words.length) return [];
+  const all = [...VAC.map(c=>({...c,esp:"vac"})), ...OVI.map(c=>({...c,esp:"ovi"}))];
+  return all.map(c=>{
+    const hay = norm(c.n+" "+c.d+" "+(ALIAS[c.id]||""));
+    let sc=0; for(const w of words){ if(hay.includes(w)) sc+= norm(c.n).includes(w)?3:2; else if(w.length>3 && hay.includes(w.slice(0,-1))) sc+=1; else return null; }
+    return {c,sc};
+  }).filter(Boolean).sort((a,b)=>b.sc-a.sc).slice(0,6).map(x=>x.c);
+}
+function wireSearch(inputId, boxId, onPick){
+  const inp=$(inputId), box=$(boxId); let res=[], act=0;
+  const draw=()=>{
+    if(!inp.value.trim()){box.classList.add("hide");return;}
+    res=buscar(inp.value); act=0;
+    box.innerHTML = res.length ? res.map((c,i)=>`<button type="button" class="${i===0?"act":""}" data-i="${i}">${c.esp==="ovi"?"🐑":"🐄"} ${c.n}<small>${c.d}</small></button>`).join("")
+      : `<div class="none">No encontramos esa categoría. Probá con otra palabra.</div>`;
+    box.classList.remove("hide");
+    box.querySelectorAll("button").forEach(b=>b.onmousedown=e=>{e.preventDefault(); pick(res[+b.dataset.i]);});
+  };
+  const pick=c=>{ if(!c) return; inp.value=""; box.classList.add("hide"); inp.blur(); onPick(c); };
+  inp.addEventListener("input",draw);
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){e.preventDefault(); pick(res[act]);} });
+  inp.addEventListener("blur",()=>setTimeout(()=>box.classList.add("hide"),120));
+}
+wireSearch("q","qres",c=>{
+  if(c.esp!==S.esp){ $("especie").querySelector(`button[data-v="${c.esp}"]`).click(); }
+  S.cat=c.id; onCat();
+  $("cats").querySelector(".cat.on")?.scrollIntoView({block:"nearest",behavior:"smooth"});
+});
+wireSearch("hq","hqres",c=>{
+  H.esp=c.esp; H.cat=c.id;
+  $("hEsp").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===H.esp));
+  renderHist();
+});
+let _rt; window.addEventListener("resize",()=>{clearTimeout(_rt); _rt=setTimeout(()=>{ if(!$("vHist").classList.contains("hide")) renderHist(); },150);});
 onCat();
 $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>showTab(b.dataset.t));
 $("hEsp").querySelectorAll("button").forEach(b=>b.onclick=()=>{
