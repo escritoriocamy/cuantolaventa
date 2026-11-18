@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel semanal · CuántoLaVenta</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g900:#0b2e22;--g800:#11402f;--g700:#17573f;--g600:#1f7350;--g500:#2e9466;--g400:#5cb88a;--g300:#9ad6b4;--g200:#cdebd9;--g100:#e9f6ee;--g50:#f5fbf7;--ink:#10251c;--muted:#5b7368;--line:#d6e7dd;--up:#1f7350;--dn:#b3261e}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--g50);color:var(--ink);line-height:1.45;-webkit-text-size-adjust:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+header{background:linear-gradient(135deg,var(--g900),var(--g700));color:#fff;padding:22px 0 64px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.top h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.top a{color:var(--g200);font-size:13.5px;text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:6px 12px;border-radius:999px}
+.lead{margin-top:14px;font-size:16px;color:var(--g200);max-width:720px}
+.lead b{color:#fff}
+main{margin-top:-44px;padding-bottom:40px;display:flex;flex-direction:column;gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(11,46,34,.07);padding:20px;min-width:0}
+.card h2{font-size:17px;font-weight:800;color:var(--g800)}
+.sub{font-size:13px;color:var(--muted);margin-top:3px}
+.post{white-space:pre-wrap;font-size:15.5px;line-height:1.6;background:var(--g50);border:1.5px dashed var(--g300);border-radius:12px;padding:14px 16px;margin-top:14px}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.btn{border:0;border-radius:999px;padding:11px 20px;font:inherit;font-weight:700;cursor:pointer;background:var(--g700);color:#fff}
+.btn:active{transform:scale(.97)}
+.btn.sec{background:var(--g100);color:var(--g800)}
+.ok{color:var(--up);font-weight:600;font-size:14px}
+.count{color:var(--muted);font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi .k{font-size:12.5px;color:var(--muted);font-weight:600}
+.kpi .v{font-size:28px;font-weight:800;color:var(--g900);margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .c{font-size:13px;font-weight:700;margin-top:2px}
+.up{color:var(--up)}.dn{color:var(--dn)}.eq{color:var(--muted)}
+.scroll{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+th{text-align:right;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:8px;border-bottom:2px solid var(--line);white-space:nowrap}
+td{text-align:right;padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+.grp td{font-weight:800;color:var(--g700);padding-top:16px;text-align:left}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px}
+.pill.Alta{background:#e9f6ee;color:#17573f}.pill.Media{background:#fff3d6;color:#7a5600}.pill.Baja{background:#fde4e0;color:#8f2615}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:13.5px;font-weight:600;color:var(--g800);cursor:pointer}
+.chip.on{background:var(--g700);border-color:var(--g700);color:#fff}
+.chart{position:relative;margin-top:12px}
+.chart svg{display:block;width:100%;height:auto}
+.tip{position:absolute;pointer-events:none;background:var(--g900);color:#fff;font-size:12.5px;padding:6px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-115%);opacity:0;transition:opacity .12s ease-out}
+.src{margin-top:10px;font-size:13px;color:var(--muted)}
+.src a{color:var(--g700)}
+.foot{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi .v{font-size:22px}}
+@media(max-width:480px){.wrap{padding:0 12px}.card{padding:15px}.top h1{font-size:19px}.lead{font-size:14.5px}table{font-size:12.5px}th,td{padding:7px 5px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top"><h1>📊 Panel semanal CuántoLaVenta</h1><a href="/panel/salir">Cerrar sesión</a></div>
+    <p class="lead" id="lead">Cargando los precios de la semana…</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card" id="publicacion">
+    <h2>Texto para publicar en X</h2>
+    <p class="sub">Se arma solo con los precios de la semana. Copialo y pegalo en tu cuenta.</p>
+    <div class="post" id="post">—</div>
+    <div class="row">
+      <button class="btn" id="copiar" type="button">Copiar texto</button>
+      <a class="btn sec" id="abrirx" href="https://x.com/compose/post" target="_blank" rel="noopener">Abrir X</a>
+      <span class="count" id="count"></span>
+      <span class="ok" id="copiado" hidden>¡Copiado!</span>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="card" id="tabla">
+    <h2>Todas las categorías</h2>
+    <p class="sub">Gordo: semana contra semana anterior. Reposición y cría: promedio de noviembre contra octubre. La certeza indica cuántas fuentes hay y si coinciden.</p>
+    <div class="scroll"><table id="tbl"></table></div>
+  </section>
+
+  <section class="card" id="historial">
+    <h2>Cómo se movió el precio</h2>
+    <p class="sub">Referencia semanal de consignatarios. Los puntos son semanas con dato publicado.</p>
+    <div class="chips" id="hchips"></div>
+    <div class="chart" id="chart"><div class="tip" id="tip"></div></div>
+  </section>
+
+  <section class="card" id="fuentes">
+    <h2>Fuentes de esta semana</h2>
+    <div class="src" id="srcs"></div>
+  </section>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const LOC = 'es-UY';
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const num = (v, d) => Number(v).toLocaleString(LOC, {minimumFractionDigits: d, maximumFractionDigits: d});
+const dec = (u) => u.includes('cab') ? 0 : 2;
+const pct = (a, b) => Math.round((a / b - 1) * 1000) / 10;
+const fdate = (s) => { const [y, m, d] = s.split('-'); return `${+d}/${+m}/${y}`; };
+const arrow = (v) => (v > 0 ? '▲ +' : v < 0 ? '▼ ' : '= ') + num(Math.abs(v), 1) + '%';
+const cls = (v) => v > 0 ? 'up' : v < 0 ? 'dn' : 'eq';
+let D, serie = 'Terneros';
+
+fetch('/panel/datos.json', {cache: 'no-store'}).then((r) => r.json()).then((d) => { D = d; render(); }).catch(() => { $('lead').textContent = 'No se pudieron cargar los datos. Recargá la página.'; });
+
+function render() {
+  const by = Object.fromEntries(D.precios.map((r) => [r.categoria, r]));
+  const s = D.semana.split('-');
+  const vn = pct(by['Novillo gordo'].actual, by['Novillo gordo'].anterior);
+  const vt = pct(by['Terneros'].actual, by['Terneros'].anterior);
+  $('lead').innerHTML = '';
+  $('lead').append('Semana al ', b(fdate(D.semana)), '. El novillo gordo está en ', b('US$ ' + num(by['Novillo gordo'].actual, 2)), ` (${arrow(vn)} en la semana) y el ternero en `, b('US$ ' + num(by['Terneros'].actual, 2) + '/kg'), ` (${arrow(vt)} frente a octubre).`);
+
+  // Texto X
+  const p = (c) => { const v = pct(by[c].actual, by[c].anterior); return (v > 0 ? '▲' : v < 0 ? '▼' : '=') + num(Math.abs(v), 1) + '%'; };
+  const lines = [
+    `🐂 Mercado ganadero 🇺🇾 semana al ${s[2]}/${s[1]}`,
+    `Novillo gordo US$ ${num(by['Novillo gordo'].actual, 2)} ${p('Novillo gordo')}`,
+    `Vaca gorda US$ ${num(by['Vaca gorda'].actual, 2)} ${p('Vaca gorda')}`,
+    `Ternero US$ ${num(by['Terneros'].actual, 2)}/kg ${p('Terneros')} vs oct`,
+    `Vaca invernada US$ ${num(by['Vacas de invernada'].actual, 2)}/kg ${p('Vacas de invernada')}`,
+    `Vaca preñada US$ ${num(by['Vacas preñadas'].actual, 0)} ${p('Vacas preñadas')}`,
+    `Calculá tu lote 👉 cuantolaventa.pages.dev`
+  ];
+  let post = lines.join('\n');
+  if ([...post].length > 280) post = lines.filter((_, i) => i !== 4).join('\n');
+  $('post').textContent = post;
+  $('count').textContent = `${[...post].length} / 280 caracteres`;
+  $('abrirx').href = 'https://x.com/intent/post?text=' + encodeURIComponent(post);
+  $('copiar').onclick = async () => {
+    try { await navigator.clipboard.writeText(post); }
+    catch (e) { const t = document.createElement('textarea'); t.value = post; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+    $('copiado').hidden = false; setTimeout(() => $('copiado').hidden = true, 2500);
+  };
+
+  // KPIs
+  const K = [['Novillo gordo', 'US$/kg carcasa'], ['Vaca gorda', 'US$/kg carcasa'], ['Terneros', 'US$/kg en pie'], ['Vacas preñadas', 'US$ por cabeza']];
+  $('kpis').innerHTML = '';
+  for (const [c, u] of K) {
+    const r = by[c], v = pct(r.actual, r.anterior);
+    const el = document.createElement('div'); el.className = 'card kpi';
+    el.innerHTML = `<div class="k"></div><div class="v"></div><div class="c"></div>`;
+    el.querySelector('.k').textContent = `${c} · ${u}`;
+    el.querySelector('.v').textContent = 'US$ ' + num(r.actual, dec(r.unidad));
+    const cc = el.querySelector('.c'); cc.textContent = arrow(v) + (r.grupo === 'Gordo' ? ' en la semana' : ' vs octubre'); cc.className = 'c ' + cls(v);
+    $('kpis').appendChild(el);
+  }
+
+  // Tabla
+  const t = $('tbl'); t.innerHTML = '<thead><tr><th>Categoría</th><th>Unidad</th><th>Precio</th><th>Anterior</th><th>Variación</th><th>Fuentes</th><th>Certeza</th></tr></thead>';
+  const tb = document.createElement('tbody'); let g = '';
+  for (const r of D.precios) {
+    const grp = r.especie + ' · ' + r.grupo;
+    if (grp !== g) { g = grp; const tr = document.createElement('tr'); tr.className = 'grp'; const td = document.createElement('td'); td.colSpan = 7; td.textContent = grp; tr.appendChild(td); tb.appendChild(tr); }
+    const v = pct(r.actual, r.anterior);
+    const tr = document.createElement('tr');
+    const cells = [r.categoria, r.unidad, num(r.actual, dec(r.unidad)), num(r.anterior, dec(r.unidad)), arrow(v), String(r.fuentes)];
+    cells.forEach((x, i) => { const td = document.createElement('td'); td.textContent = x; if (i === 4) td.className = cls(v); tr.appendChild(td); });
+    const td = document.createElement('td'); const sp = document.createElement('span'); sp.className = 'pill ' + r.certeza; sp.textContent = r.certeza; td.appendChild(sp); tr.appendChild(td);
+    tb.appendChild(tr);
+  }
+  t.appendChild(tb);
+
+  // Historial
+  const names = [...new Set(D.historia.map((r) => r.categoria))];
+  $('hchips').innerHTML = '';
+  for (const n of names) {
+    const bt = document.createElement('button'); bt.className = 'chip' + (n === serie ? ' on' : ''); bt.textContent = n; bt.type = 'button';
+    bt.onclick = () => { serie = n; render(); }; $('hchips').appendChild(bt);
+  }
+  chart();
+
+  // Fuentes
+  $('srcs').innerHTML = '';
+  for (const f of D.fuentes) { const a = document.createElement('a'); a.href = f.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = f.nombre; const dv = document.createElement('div'); dv.style.marginTop = '4px'; dv.append('• ', a); $('srcs').appendChild(dv); }
+  $('foot').textContent = `Datos actualizados el ${fdate(D.actualizado)}. Página privada, no se indexa en buscadores.`;
+}
+
+function b(t) { const e = document.createElement('b'); e.textContent = t; return e; }
+
+function chart() {
+  const box = $('chart'); box.querySelectorAll('svg').forEach((e) => e.remove());
+  const rows = D.historia.filter((r) => r.categoria === serie).sort((a, b) => a.fecha < b.fecha ? -1 : 1);
+  const W = Math.max(300, box.clientWidth), H = W < 520 ? 230 : 290, L = 50, R = 16, T = 16, B = 34;
+  const ts = rows.map((r) => Date.parse(r.fecha + 'T12:00:00Z')), vs = rows.map((r) => r.valor);
+  const t0 = Math.min(...ts), t1 = Math.max(...ts), mn = Math.min(...vs), mx = Math.max(...vs), pad = (mx - mn) * 0.2 || 0.1;
+  const lo = mn - pad, hi = mx + pad;
+  const X = (t) => L + (t - t0) / (t1 - t0 || 1) * (W - L - R), Y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+  const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', `Precio de ${serie} por semana`);
+  const add = (tag, at, txt) => { const e = document.createElementNS(ns, tag); for (const k in at) e.setAttribute(k, at[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
+  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4, y = Y(v); add('line', {x1: L, x2: W - R, y1: y, y2: y, stroke: '#d6e7dd', 'stroke-dasharray': i ? '3 4' : '0'}); add('text', {x: L - 8, y: y + 4, 'text-anchor': 'end', 'font-size': 12, fill: '#5b7368'}, num(v, 2)); }
+  let last = -999; rows.forEach((r, i) => { const x = X(ts[i]); if (x - last < 70 && i !== rows.length - 1) return; if (i === rows.length - 1 && x - last < 70) return; last = x; const [y, m] = r.fecha.split('-'); add('text', {x, y: H - 10, 'text-anchor': 'middle', 'font-size': 12, fill: '#5b7368'}, `${MES[+m - 1]} ${y.slice(2)}`); });
+  const pts = rows.map((r, i) => [X(ts[i]), Y(r.valor)]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  add('path', {d: d + ` L${pts[pts.length - 1][0]},${H - B} L${pts[0][0]},${H - B} Z`, fill: 'rgba(46,148,102,.12)'});
+  add('path', {d, fill: 'none', stroke: '#17573f', 'stroke-width': 3, 'stroke-linejoin': 'round'});
+  const tip = $('tip');
+  pts.forEach((p, i) => {
+    const c = add('circle', {cx: p[0], cy: p[1], r: 5.5, fill: '#fff', stroke: '#17573f', 'stroke-width': 2.5}); c.style.cursor = 'pointer';
+    const show = () => { const rb = box.getBoundingClientRect(), cb = c.getBoundingClientRect(); tip.textContent = `${fdate(rows[i].fecha)} · US$ ${num(rows[i].valor, 2)}`; tip.style.left = (cb.left - rb.left + cb.width / 2) + 'px'; tip.style.top = (cb.top - rb.top) + 'px'; tip.style.opacity = 1; };
+    c.addEventListener('mouseenter', show); c.addEventListener('click', show); c.addEventListener('mouseleave', () => tip.style.opacity = 0);
+  });
+  box.insertBefore(svg, tip);
+}
+let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => D && chart(), 150); });
+</script>
+</body>
+</html>
