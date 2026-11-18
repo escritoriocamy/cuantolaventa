@@ -344,7 +344,7 @@ footer a{color:var(--g300)}
     <p class="lead">Promedios de los últimos remates y de la referencia semanal. Vacunos de reposición en US$/kg en pie salvo indicación. La columna Certeza indica cuántas fuentes respaldan cada precio y si coinciden.</p>
     <div class="cards4" id="kpis"></div>
     <div class="scroll"><table class="tbl" id="tbl"></table></div>
-    <p class="note">Referencia semanal: precios de referencia del mercado (gordo en US$/kg carcasa). Remates 1, 2 y 3: promedios de remates por pantalla de noviembre 2026. “—” = sin oferta o sin dato en ese remate; el promedio se calcula con las fuentes disponibles.</p>
+    <p class="note">Referencia semanal: precios de la asociación de consignatarios (semana al 16/11; gordo en US$/kg carcasa). Oficial: relevamiento semanal de precios de hacienda del instituto de carnes (al 07/11, solo gordo). Negocios: rango de negocios concretados con la industria que informan los operadores (semana al 06/11; se toma el punto medio). Remates 1, 2 y 3: remates por pantalla de noviembre 2026. Remates oct.: promedio de los remates por pantalla del 21–22 de octubre. “—” = sin oferta o sin dato en ese remate; el promedio se calcula con las fuentes disponibles.</p>
   </section>
   </div><!-- /vCalc2 -->
 </main>
@@ -362,63 +362,62 @@ footer a{color:var(--g300)}
 */
 const UPDATED = "18/11/2026";
 const SOURCES = {
-  ref: {name:"Referencia semanal", date:"Semana al 02/11"},
+  ref: {name:"Referencia semanal", date:"Consignatarios · semana al 16/11"},
+  of:  {name:"Relevamiento oficial", date:"Semana al 07/11 · solo gordo"},
+  neg: {name:"Negocios de campo", date:"Semana al 06/11 · solo gordo"},
   r1:  {name:"Remate 1", date:"05–06/11"},
   r2:  {name:"Remate 2", date:"12–13/11"},
-  r3: {name:"Remate 3", date:"04/11"}
+  r3:  {name:"Remate 3", date:"04/11"},
+  oct: {name:"Remates de octubre", date:"Promedio de 2–3 remates · 21–22/10"}
 };
 
 const VAC = [
   {id:"ternero", n:"Terneros", d:"Machos al destete", u:"kg", peso:180,
-    p:{ref:4.58, r1:4.11, r2:4.01, r3:4.60},
-    br:{ // precio por franja de peso cuando el remate lo publicó
-      lt140:{r1:6.56}, b140:{r1:5.00, r2:4.85}, gt180:{r1:3.92, r2:3.89, r3:4.43}
-    }},
+    p:{ref:4.49, r1:4.11, r2:4.01, r3:4.60, oct:4.37}},
   {id:"ternera", n:"Terneras", d:"Hembras al destete", u:"kg", peso:170,
-    p:{ref:4.36, r1:4.33, r2:3.97, r3:4.23},
-    br:{lt140:{r2:4.78}, gt140:{r2:3.90}}},
+    p:{ref:4.39, r1:4.33, r2:3.97, r3:4.23, oct:4.17}},
   {id:"mixto", n:"Terneros y terneras", d:"Lote mixto", u:"kg", peso:170,
-    p:{r1:4.11, r2:4.42}},
+    p:{r1:4.11, r2:4.42, oct:4.36}},
   {id:"nov12", n:"Novillos 1–2 años", d:"Recría", u:"kg", peso:280,
-    p:{r1:3.69, r2:3.62}},
+    p:{r1:3.69, r2:3.62, oct:3.69}},
   {id:"nov23", n:"Novillos 2–3 años", d:"Invernada", u:"kg", peso:360,
-    p:{r1:3.30, r2:3.28, r3:3.70}},
+    p:{r1:3.30, r2:3.28, r3:3.70, oct:3.43}},
   {id:"nov3", n:"Novillos +3 años", d:"Invernada pesada", u:"kg", peso:420,
-    p:{r1:3.29, r2:3.24}},
+    p:{r1:3.29, r2:3.24, oct:3.37}},
   {id:"vaq12", n:"Vaquillonas 1–2 años", d:"Sin servicio", u:"kg", peso:260,
-    p:{r1:3.78, r2:3.43, r3:3.70}},
+    p:{r1:3.78, r2:3.43, r3:3.70, oct:3.72}},
   {id:"vaq2", n:"Vaquillonas +2 años", d:"Sin servicio", u:"kg", peso:330,
     p:{r1:3.38, r2:3.47}},
   {id:"vinv", n:"Vacas de invernada", d:"Vacías, para engorde", u:"kg", peso:380,
-    p:{ref:2.63, r1:2.78, r2:2.77, r3:2.65}},
+    p:{ref:2.64, r1:2.78, r2:2.77, r3:2.65, oct:2.71}},
   {id:"vpre", n:"Vacas preñadas", d:"Con diagnóstico, incluye próximas", u:"cab", preg:true,
-    p:{r1:1383.88, r2:1276, r3:1413}},
+    p:{r1:1383.88, r2:1276, r3:1413, oct:1295}},
   {id:"vqpre", n:"Vaquillonas preñadas", d:"Primera preñez", u:"cab", preg:true,
-    p:{r1:1383.88, r2:1327, r3:1413}},
+    p:{r1:1383.88, r2:1327, r3:1413, oct:1283}},
   {id:"ento", n:"Vientres entorados", d:"Con toro, sin diagnóstico", u:"cab",
-    p:{r1:1154.95, r2:1130, r3:1045}},
+    p:{r1:1154.95, r2:1130, r3:1045, oct:1083.5}},
   {id:"cria", n:"Piezas de cría", d:"Vaca con ternero al pie", u:"cab",
-    p:{r1:827.32, r2:827}},
+    p:{r1:827.32, r2:827, oct:794.8}},
   {id:"holando", n:"Novillos Holando", d:"Machos Holando de recría", u:"kg", peso:300,
-    p:{r1:3.25, r2:2.95}},
+    p:{r1:3.25, r2:2.95, oct:3.04}},
   {id:"toro", n:"Toros", d:"Reproductores", u:"cab",
-    p:{r3:3080}},
+    p:{r3:3080, oct:1600}},
   {id:"gnov", n:"Novillo gordo", d:"Para faena", u:"carc", peso:520, rend:54,
-    p:{ref:6.01}},
+    p:{ref:5.96, of:6.09, neg:6.05}},
   {id:"gvaca", n:"Vaca gorda", d:"Para faena", u:"carc", peso:470, rend:50,
-    p:{ref:5.67}},
+    p:{ref:5.56, of:5.72, neg:5.70}},
   {id:"gvaq", n:"Vaquillona gorda", d:"Para faena", u:"carc", peso:400, rend:52,
-    p:{ref:5.91}}
+    p:{ref:5.87, of:5.98, neg:5.98}}
 ];
 
 const OVI = [
-  {id:"cordero", n:"Corderos/as", d:"Reposición", u:"cab", p:{r1:92}},
-  {id:"borrego", n:"Borregos/as", d:"2 dientes", u:"cab", p:{r1:96, r2:78}},
-  {id:"ovcria", n:"Ovejas de cría", d:"2 o más encarneradas", u:"cab", p:{r1:96.6}},
-  {id:"gcord", n:"Cordero gordo", d:"Para faena", u:"carc", peso:40, rend:46, p:{ref:6.52}},
-  {id:"gborr", n:"Borrego gordo", d:"Para faena", u:"carc", peso:45, rend:45, p:{ref:6.50}},
-  {id:"gcap", n:"Capón", d:"Para faena", u:"carc", peso:50, rend:44, p:{ref:5.51}},
-  {id:"goveja", n:"Oveja gorda", d:"Para faena", u:"carc", peso:48, rend:42, p:{ref:5.40}}
+  {id:"cordero", n:"Corderos/as", d:"Reposición", u:"cab", p:{r1:92, oct:87.5}},
+  {id:"borrego", n:"Borregos/as", d:"2 dientes", u:"cab", p:{r1:96, oct:78}},
+  {id:"ovcria", n:"Ovejas de cría", d:"2 o más encarneradas", u:"cab", p:{r1:96.6, oct:94.5}},
+  {id:"gcord", n:"Cordero gordo", d:"Para faena", u:"carc", peso:40, rend:46, p:{ref:6.57}},
+  {id:"gborr", n:"Borrego gordo", d:"Para faena", u:"carc", peso:45, rend:45, p:{ref:6.56}},
+  {id:"gcap", n:"Capón", d:"Para faena", u:"carc", peso:50, rend:44, p:{ref:5.59}},
+  {id:"goveja", n:"Oveja gorda", d:"Para faena", u:"carc", peso:48, rend:42, p:{ref:5.49}}
 ];
 
 const RAZAS_VAC = [
@@ -506,31 +505,31 @@ function factorLote(cab){
 /* ============ HISTORIAL ============
    [fecha, valor]. Referencia semanal = grilla de consignatarios; Remates = promedios de remates por pantalla. */
 const HIST = {
-  ternero:{f:"Referencia semanal", d:[["2025-10-13",3.55],["2026-02-16",3.55],["2026-02-23",3.67],["2026-04-27",4.14],["2026-06-29",4.18],["2026-08-10",4.32],["2026-08-31",4.58],["2026-10-26",4.51],["2026-11-02",4.58]]},
-  ternera:{f:"Referencia semanal", d:[["2026-02-23",3.35],["2026-04-27",3.77],["2026-06-29",3.98],["2026-08-10",4.13],["2026-08-31",4.35],["2026-09-21",4.33],["2026-10-26",4.38],["2026-11-02",4.36]]},
+  ternero:{f:"Referencia semanal", d:[["2025-10-13",3.55],["2026-02-16",3.55],["2026-02-23",3.67],["2026-04-27",4.14],["2026-06-29",4.18],["2026-08-10",4.32],["2026-08-31",4.58],["2026-10-26",4.51],["2026-11-02",4.58],["2026-11-09",4.58],["2026-11-16",4.49]]},
+  ternera:{f:"Referencia semanal", d:[["2026-02-23",3.35],["2026-04-27",3.77],["2026-06-29",3.98],["2026-08-10",4.13],["2026-08-31",4.35],["2026-09-21",4.33],["2026-10-26",4.38],["2026-11-02",4.36],["2026-11-09",4.37],["2026-11-16",4.39]]},
   mixto:{f:"Remates", d:[["2026-10-21",4.44],["2026-11-05",4.11],["2026-11-12",4.42]]},
   nov12:{f:"Remates", d:[["2026-10-21",3.66],["2026-11-05",3.69],["2026-11-12",3.62]]},
-  nov23:{f:"Remates", d:[["2026-10-21",3.44],["2026-11-04",3.70],["2026-11-05",3.30],["2026-11-12",3.28]]},
+  nov23:{f:"Remates", d:[["2026-10-21",3.44],["2026-11-04",3.7],["2026-11-05",3.3],["2026-11-12",3.28]]},
   nov3:{f:"Remates", d:[["2026-10-21",3.37],["2026-11-05",3.29],["2026-11-12",3.24]]},
-  vaq12:{f:"Remates", d:[["2026-10-22",3.75],["2026-11-04",3.70],["2026-11-06",3.78],["2026-11-12",3.43]]},
+  vaq12:{f:"Remates", d:[["2026-10-21",3.68],["2026-10-22",3.75],["2026-11-04",3.7],["2026-11-06",3.78],["2026-11-12",3.43]]},
   vaq2:{f:"Remates", d:[["2026-11-06",3.38],["2026-11-13",3.47]]},
-  vinv:{f:"Referencia semanal", d:[["2026-02-16",2.30],["2026-02-23",2.36],["2026-04-27",2.30],["2026-06-29",2.32],["2026-08-10",2.45],["2026-08-31",2.60],["2026-09-21",2.50],["2026-10-26",2.60],["2026-11-02",2.63]]},
-  vpre:{f:"Remates", d:[["2026-10-22",1297],["2026-11-04",1413],["2026-11-06",1384],["2026-11-12",1276],["2026-11-13",1428]]},
+  vinv:{f:"Referencia semanal", d:[["2026-02-16",2.3],["2026-02-23",2.36],["2026-04-27",2.3],["2026-06-29",2.32],["2026-08-10",2.45],["2026-08-31",2.6],["2026-09-21",2.5],["2026-10-26",2.6],["2026-11-02",2.63],["2026-11-09",2.62],["2026-11-16",2.64]]},
+  vpre:{f:"Remates", d:[["2026-10-21",1293],["2026-10-22",1297],["2026-11-04",1413],["2026-11-06",1384],["2026-11-12",1276],["2026-11-13",1428]]},
   vqpre:{f:"Remates", d:[["2026-10-22",1283],["2026-11-12",1327],["2026-11-13",1245]]},
-  ento:{f:"Remates", d:[["2026-10-22",1047],["2026-11-04",1045],["2026-11-06",1155],["2026-11-12",1130]]},
-  cria:{f:"Remates", d:[["2026-10-22",791],["2026-11-05",827],["2026-11-12",827],["2026-11-13",874]]},
-  holando:{f:"Remates", d:[["2026-11-05",3.25],["2026-11-12",2.95]]},
-  toro:{f:"Remates", d:[["2026-11-04",3080]]},
-  gnov:{f:"Referencia semanal", d:[["2025-11-24",5.15],["2026-06-15",5.58],["2026-08-10",5.81],["2026-08-31",5.98],["2026-09-21",5.78],["2026-10-26",6.00],["2026-11-02",6.01]]},
-  gvaca:{f:"Referencia semanal", d:[["2025-11-24",4.78],["2026-06-15",5.21],["2026-08-10",5.42],["2026-08-31",5.67],["2026-09-21",5.39],["2026-11-02",5.67]]},
-  gvaq:{f:"Referencia semanal", d:[["2025-11-24",5.00],["2026-06-15",5.44],["2026-08-10",5.68],["2026-08-31",5.89],["2026-09-21",5.73],["2026-11-02",5.91]]},
-  cordero:{f:"Remates", d:[["2026-11-06",92]]},
+  ento:{f:"Remates", d:[["2026-10-21",1120],["2026-10-22",1047],["2026-11-04",1045],["2026-11-06",1155],["2026-11-12",1130]]},
+  cria:{f:"Remates", d:[["2026-10-21",798.54],["2026-10-22",791],["2026-11-05",827],["2026-11-12",827],["2026-11-13",874]]},
+  holando:{f:"Remates", d:[["2026-10-21",3.11],["2026-11-05",3.25],["2026-11-12",2.95]]},
+  toro:{f:"Remates", d:[["2026-10-21",1600],["2026-11-04",3080]]},
+  gnov:{f:"Referencia semanal", d:[["2025-11-24",5.15],["2026-06-15",5.58],["2026-08-10",5.81],["2026-08-31",5.98],["2026-09-21",5.78],["2026-10-26",6.0],["2026-11-02",6.01],["2026-11-09",6.0],["2026-11-16",5.96]]},
+  gvaca:{f:"Referencia semanal", d:[["2025-11-24",4.78],["2026-06-15",5.21],["2026-08-10",5.42],["2026-08-31",5.67],["2026-09-21",5.39],["2026-11-02",5.67],["2026-11-09",5.66],["2026-11-16",5.56]]},
+  gvaq:{f:"Referencia semanal", d:[["2025-11-24",5.0],["2026-06-15",5.44],["2026-08-10",5.68],["2026-08-31",5.89],["2026-09-21",5.73],["2026-11-02",5.91],["2026-11-09",5.89],["2026-11-16",5.87]]},
+  cordero:{f:"Remates", d:[["2026-10-21",87.5],["2026-11-06",92]]},
   borrego:{f:"Remates", d:[["2026-10-22",78],["2026-11-06",96]]},
-  ovcria:{f:"Remates", d:[["2026-11-06",96.6]]},
-  gcord:{f:"Referencia semanal", d:[["2025-10-13",5.48],["2025-11-24",5.75],["2026-08-10",6.25],["2026-11-02",6.52]]},
-  gborr:{f:"Referencia semanal", d:[["2025-11-24",5.74],["2026-11-02",6.50]]},
-  gcap:{f:"Referencia semanal", d:[["2026-08-10",5.30],["2026-11-02",5.51]]},
-  goveja:{f:"Referencia semanal", d:[["2026-08-10",5.15],["2026-11-02",5.40]]}
+  ovcria:{f:"Remates", d:[["2026-10-21",103],["2026-11-06",96.6]]},
+  gcord:{f:"Referencia semanal", d:[["2025-10-13",5.48],["2025-11-24",5.75],["2026-08-10",6.25],["2026-11-02",6.52],["2026-11-09",6.54],["2026-11-16",6.57]]},
+  gborr:{f:"Referencia semanal", d:[["2025-11-24",5.74],["2026-11-02",6.5],["2026-11-09",6.54],["2026-11-16",6.56]]},
+  gcap:{f:"Referencia semanal", d:[["2026-08-10",5.3],["2026-11-02",5.51],["2026-11-09",5.56],["2026-11-16",5.59]]},
+  goveja:{f:"Referencia semanal", d:[["2026-08-10",5.15],["2026-11-02",5.4],["2026-11-09",5.44],["2026-11-16",5.49]]}
 };
 const H = {esp:"vac", cat:"ternero"};
 const MES = ["ene","feb","mar","abr","may","jun","jul","ago","set","oct","nov","dic"];
@@ -731,7 +730,7 @@ function calc(){
   const maxV = Math.max(...ok.map(r=>r.v),1);
   $("srcList").innerHTML = rows.map(r=>{
     const S0 = SOURCES[r.s];
-    if(r.v==null) return `<div class="srow"><div><div class="sname">${S0.name}</div><div class="sdate">${S0.date}</div></div><div class="sval na">Sin dato</div></div>`;
+    if(r.v==null) return "";
     const unit = c.u==="cab" ? "por cabeza" : c.u==="carc" ? `${usd(r.p,2)}/kg carc.` : `${usd(r.p,2)}/kg`;
     return `<div class="srow"><div><div class="sname">${S0.name}</div><div class="sdate">${S0.date}</div></div>
       <div class="sval">${usd(r.v*cab)}<small>${c.u==="cab"?usd(r.v)+" "+unit:unit}</small></div>
@@ -760,16 +759,16 @@ function calc(){
 /* Pizarra */
 function renderTable(){
   const all = [...VAC.map(c=>({...c,esp:"Vacunos"})), ...OVI.map(c=>({...c,esp:"Ovinos"}))];
-  const head = `<tr><th>Categoría</th><th>Ref. semanal</th><th>Remate 1</th><th>Remate 2</th><th>Remate 3</th><th>Promedio</th><th>Certeza</th></tr>`;
+  const head = `<tr><th>Categoría</th><th>Ref. semanal</th><th>Oficial</th><th>Negocios</th><th>Remate 1</th><th>Remate 2</th><th>Remate 3</th><th>Remates oct.</th><th>Promedio</th><th>Certeza</th></tr>`;
   let lastEsp = "";
   const body = all.map(c=>{
     const d = c.u==="cab"?0:2;
-    const vals = ["ref","r1","r2","r3"].map(s=>c.p[s]);
+    const vals = ["ref","of","neg","r1","r2","r3","oct"].map(s=>c.p[s]);
     const ok = vals.filter(v=>v!=null);
     const avg = ok.reduce((a,b)=>a+b,0)/ok.length;
     const unit = c.u==="cab"?"US$/cab":c.u==="carc"?"US$/kg carc.":"US$/kg";
     let sep = "";
-    if(c.esp!==lastEsp){ lastEsp=c.esp; sep=`<tr><td colspan="7" style="font-weight:800;color:var(--g700);padding-top:16px">${c.esp}</td></tr>`; }
+    if(c.esp!==lastEsp){ lastEsp=c.esp; sep=`<tr><td colspan="10" style="font-weight:800;color:var(--g700);padding-top:16px">${c.esp}</td></tr>`; }
     return sep + `<tr><td>${c.n} <span class="u">${unit}</span></td>${vals.map(v=>`<td>${v==null?'<span class="u">—</span>':fmt(v,d)}</td>`).join("")}<td><b>${fmt(avg,d)}</b></td><td>${(()=>{const k=certeza(vals);return `<span class="pill ${k.nivel}" title="${k.n} fuente(s), dispersión ${fmt(k.disp,0)}%">${k.nivel==="alta"?"Alta":k.nivel==="media"?"Media":"Baja"} · ${k.n}</span>`})()}</td></tr>`;
   }).join("");
   $("tbl").innerHTML = head + body;
