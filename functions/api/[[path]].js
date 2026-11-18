@@ -1,7 +1,7 @@
 // API de CuántoLaVenta: cuentas con Google, lotes guardados y seguimiento.
 // Necesita un binding D1 llamado DB en el proyecto de Cloudflare Pages.
 // El ID de cliente de Google es público (no es una clave secreta).
-const GOOGLE_CLIENT_ID = "";               // se completa al crear el cliente OAuth en Google Cloud
+const GOOGLE_CLIENT_ID = "1013589460846-5avkpoukfm88ut8iv4albvvmp1iqds2d.apps.googleusercontent.com";               // se completa al crear el cliente OAuth en Google Cloud
 const GRATIS_HASTA = "2026-12-31";         // todo gratis durante 2026
 const ADMINS = ["franciscocamyausan@gmail.com"];
 const SESION_DIAS = 60;
