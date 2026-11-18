@@ -140,7 +140,7 @@ textarea:focus{border-color:var(--g500)}
 .adjbox{margin-top:12px;background:var(--g50);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
 .adjbox .r{display:flex;justify-content:space-between;padding:3px 0}
 .adjbox .r b.up{color:var(--g700)} .adjbox .r b.dn{color:var(--warn)}
-.tabs{display:flex;gap:6px;background:var(--white);padding:6px;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(11,46,34,.08);margin-bottom:16px;max-width:420px}
+.tabs{display:flex;gap:6px;background:var(--white);padding:6px;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(11,46,34,.08);margin-bottom:16px;max-width:640px}
 .tabs button{flex:1;border:0;background:transparent;padding:11px 14px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--g700);font-size:15px;transition:background-color .15s ease-out,color .15s ease-out}
 .tabs button.on{background:var(--g700);color:#fff}
 .tabs button:active,.btn:active,.chip:active,.cat:active{transform:scale(.97)}
@@ -191,6 +191,44 @@ textarea:focus{border-color:var(--g500)}
   .btns{flex-direction:column}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.brand{flex-wrap:wrap}
+.auth{margin-left:auto;display:flex;align-items:center;gap:8px}
+.auth .who{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:4px 10px 4px 4px;border-radius:999px;font-size:13px;font-weight:600;color:#fff;cursor:pointer}
+.auth img{width:28px;height:28px;border-radius:50%}
+.auth .ini{width:28px;height:28px;border-radius:50%;background:var(--g400);display:grid;place-items:center;color:var(--g900);font-weight:800}
+.gbtn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#1f1f1f;border:1px solid #dadce0;border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;cursor:pointer}
+.gbtn svg{width:18px;height:18px}
+.savebox{margin-top:12px;background:var(--g50);border:1px solid var(--line);border-radius:12px;padding:12px}
+.savebox input[type=text]{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;margin-top:6px}
+.savebox .act{display:flex;gap:8px;margin-top:10px}
+.msg{font-size:13.5px;margin-top:8px;font-weight:600}
+.msg.ok{color:var(--g700)} .msg.err{color:#b3261e}
+.lotes{padding:22px}
+.lotes h2{font-size:20px;font-weight:800}
+.promo{background:linear-gradient(135deg,var(--g800),var(--g600));color:#fff;border-radius:14px;padding:16px 18px;margin-top:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.promo b{font-size:16px}
+.promo span{color:var(--g200);font-size:13.5px}
+.benef{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
+.benef div{background:var(--g50);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px}
+.benef b{display:block;color:var(--g800);margin-bottom:2px}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+@media(max-width:600px){.sum{grid-template-columns:1fr 1fr}}
+.lote{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;background:#fff}
+.lote .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.lote h3{font-size:16px;font-weight:800;color:var(--g900)}
+.lote .meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.lote .vals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.lote .vals div{background:var(--g50);border-radius:10px;padding:8px 10px}
+.lote .vals small{display:block;font-size:11.5px;color:var(--muted)}
+.lote .vals b{font-size:16px;font-variant-numeric:tabular-nums}
+.lote .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.lote .acts button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--g800);cursor:pointer}
+.lote .acts button.del{color:#b3261e}
+.lote .edit{margin-top:10px;background:var(--g50);border-radius:10px;padding:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.lote .edit label{font-size:12px}
+.lote .edit input,.lote .edit textarea{width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:9px;font-size:14px}
+.spark{display:block;width:100%;height:46px;margin-top:8px}
+.empty{color:var(--muted);text-align:center;padding:24px 10px;font-size:14.5px}
 footer{background:var(--g900);color:var(--g200);padding:26px 0;font-size:13px}
 footer a{color:var(--g300)}
 .note{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5}
@@ -205,6 +243,7 @@ footer a{color:var(--g300)}
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0b2e22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7c1 2 3 3 5 3h6c2 0 4-1 5-3"/><path d="M6 10v5a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-5"/><path d="M10 14h.01M14 14h.01"/><path d="M3 5l2 2M21 5l-2 2"/></svg>
       </div>
       <div><h1>CuántoLaVenta</h1><small>cuantolaventa · Calculadora de ganado Uruguay</small></div>
+      <div class="auth" id="auth"></div>
     </div>
     <div class="hero">
       <p>Ingresá tu lote y mirá cuánto vale hoy según los últimos remates por pantalla y los precios de referencia del mercado.</p>
@@ -217,6 +256,7 @@ footer a{color:var(--g300)}
   <div class="tabs" id="tabs">
     <button class="on" data-t="calc">🧮 Calculadora</button>
     <button data-t="hist">📈 Historial de precios</button>
+    <button data-t="lotes">📁 Mis lotes</button>
   </div>
   <div id="vCalc">
   <div class="grid">
@@ -308,6 +348,13 @@ footer a{color:var(--g300)}
         <button class="btn" id="copyBtn">Copiar resumen</button>
         <button class="btn pri" id="waBtn">Compartir por WhatsApp</button>
       </div>
+      <button class="btn pri" id="saveBtn" style="width:100%;margin-top:8px">💾 Guardar en mis lotes</button>
+      <div class="savebox hide" id="saveBox">
+        <label for="loteNombre">Nombre del lote</label>
+        <input type="text" id="loteNombre" maxlength="80" placeholder="Ej: Terneros Hereford potrero 3">
+        <div class="act"><button class="btn pri" id="saveOk">Guardar</button><button class="btn" id="saveCancel">Cancelar</button></div>
+        <div class="msg" id="saveMsg"></div>
+      </div>
       <p class="note" id="noteTxt"></p>
       <button class="linkbtn" id="toHist">📈 Ver cómo valió esta categoría en el tiempo</button>
     </div>
@@ -335,6 +382,14 @@ footer a{color:var(--g300)}
         <p class="note" id="hNote"></p>
       </div>
     </div>
+  </section>
+
+  <!-- MIS LOTES -->
+  <section class="card lotes hide" id="vLotes">
+    <h2>📁 Mis lotes</h2>
+    <p class="lead" style="color:var(--muted);font-size:14px;margin-top:4px">Guardá tus lotes y seguí cuánto valen semana a semana con los precios del mercado.</p>
+    <div class="promo"><div><b>🎁 Gratis durante todo 2026</b><br><span>Todas las funciones sin costo para productores, compradores, vendedores y consignatarios.</span></div></div>
+    <div id="lotesBody"></div>
   </section>
 
   <div id="vCalc2">
@@ -592,7 +647,9 @@ function showTab(t){
   $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
   $("vCalc").classList.toggle("hide",t!=="calc"); $("vCalc2").classList.toggle("hide",t!=="calc");
   $("vHist").classList.toggle("hide",t!=="hist");
+  $("vLotes").classList.toggle("hide",t!=="lotes");
   if(t==="hist") renderHist();
+  if(t==="lotes" && window.renderLotes) renderLotes();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -866,6 +923,225 @@ $("hEsp").querySelectorAll("button").forEach(b=>b.onclick=()=>{
   H.esp=b.dataset.v; H.cat=(H.esp==="vac"?VAC:OVI)[0].id; renderHist();});
 $("toHist").onclick=()=>{H.esp=S.esp; H.cat=S.cat;
   $("hEsp").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===H.esp)); showTab("hist");};
+
+/* ===================== CUENTAS Y MIS LOTES ===================== */
+(function(){
+  const API = (path, opt={}) => fetch('/api/'+path, {credentials:'same-origin', ...opt,
+    headers:{'Content-Type':'application/json','X-CLV':'1', ...(opt.headers||{})}}).then(async r=>{
+      const d = await r.json().catch(()=>({}));
+      if(!r.ok) throw Object.assign(new Error(d.error||'Error'), {status:r.status});
+      return d;
+    });
+  const A = {cfg:null, user:null, lotes:[], cargando:false};
+  const esc = s => String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const GSVG = '<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.6 13.3l7.9 6.1C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C.9 16.6 0 20.2 0 24s.9 7.4 2.6 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.5 2.3-6.3 0-11.6-4.2-13.5-10l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>';
+
+  /* --- estado del formulario de la calculadora --- */
+  function estadoActual(){
+    return {esp:S.esp, cat:S.cat, raza:S.raza, cal:S.cal, mes:S.mes,
+      cab:+$("cab").value||0, peso:+$("peso").value||0, rend:+$("rend").value||50,
+      com:$("coment").value||"", own:$("own").value||"", comision:+$("com").value||0, gastos:+$("gas").value||0};
+  }
+  function cargarEstado(e){
+    if(e.esp!==S.esp) $("especie").querySelector(`button[data-v="${e.esp}"]`).click();
+    S.cat=e.cat; onCat();
+    S.raza=e.raza; S.cal=e.cal; S.mes=e.mes||5;
+    renderChips("razas", S.esp==="vac"?RAZAS_VAC:RAZAS_OVI, "raza"); renderChips("calidad", CALIDAD, "cal"); renderMonths();
+    $("cab").value=e.cab; if(e.peso) $("peso").value=e.peso; if(e.rend) $("rend").value=e.rend;
+    $("coment").value=e.com||""; $("own").value=e.own||""; $("com").value=e.comision??3; $("gas").value=e.gastos??1.5;
+    calc();
+  }
+  /* --- valuación de un lote con los precios de hoy (misma cuenta que la calculadora) --- */
+  function valuar(e){
+    const L = e.esp==="vac"?VAC:OVI; const c = L.find(x=>x.id===e.cat); if(!c) return null;
+    const cab=+e.cab||0, peso=+e.peso||0, rend=(+e.rend||50)/100;
+    const fr=((e.esp==="vac"?RAZAS_VAC:RAZAS_OVI).find(r=>r.n===e.raza)||{f:1}).f;
+    const fc=(CALIDAD.find(r=>r.n===e.cal)||{f:1}).f;
+    const fp=c.preg?PREG[e.mes||5]:1;
+    const adj=fr*fc*fp*leerComentario(e.com||"").f*factorLote(cab);
+    const vs=[], ps=[];
+    Object.keys(SOURCES).forEach(s=>{ const p=srcPrice(c,s,peso); if(p==null) return;
+      ps.push(p*adj); vs.push(c.u==="cab"?p*adj:c.u==="kg"?p*peso*adj:p*peso*rend*adj); });
+    let porCab=vs.reduce((a,b)=>a+b,0)/(vs.length||1), porKg=ps.reduce((a,b)=>a+b,0)/(ps.length||1);
+    const own=parseFloat(String(e.own||"").replace(",","."));
+    if(!isNaN(own)&&own>0){ porKg=own; porCab=c.u==="cab"?own:c.u==="kg"?own*peso:own*peso*rend; }
+    const ct=certeza(Object.values(c.p));
+    return {cat:c, total:porCab*cab, porCab, porKg:c.u==="cab"?null:porKg, certeza:ct.nivel, fuentes:ct.n, cab, peso};
+  }
+  const preciosAl = () => { const [d,m,y]=UPDATED.split("/"); return `${y}-${m}-${d}`; };
+  function valToPayload(v, nota){
+    return {fecha:new Date().toISOString(), cabezas:v.cab, peso:v.peso, total:Math.round(v.total), por_cabeza:Math.round(v.porCab*100)/100,
+      por_kilo:v.porKg==null?null:Math.round(v.porKg*100)/100, certeza:v.certeza, fuentes:v.fuentes, precios_al:preciosAl(), nota:nota||""};
+  }
+
+  /* --- Google --- */
+  let gisCargado=false;
+  function cargarGIS(){
+    return new Promise(res=>{ if(gisCargado) return res(); const s=document.createElement('script');
+      s.src='https://accounts.google.com/gsi/client'; s.async=true; s.onload=()=>{gisCargado=true; res();}; s.onerror=()=>res(); document.head.appendChild(s); });
+  }
+  async function botonGoogle(el){
+    el.innerHTML='';
+    if(!A.cfg || !A.cfg.googleClientId || !A.cfg.baseDatos){
+      el.innerHTML='<button class="gbtn" disabled style="opacity:.75;cursor:default">'+GSVG+' Ingreso con Google · disponible muy pronto</button>'; return;
+    }
+    await cargarGIS();
+    if(!window.google||!google.accounts){ el.textContent='No se pudo cargar el ingreso con Google. Recargá la página.'; return; }
+    google.accounts.id.initialize({client_id:A.cfg.googleClientId, callback:onCredencial, ux_mode:'popup', auto_select:false});
+    google.accounts.id.renderButton(el,{theme:'outline',size:'large',shape:'pill',text:'continue_with',locale:'es'});
+  }
+  async function onCredencial(resp){
+    try{ const d=await API('auth/google',{method:'POST',body:JSON.stringify({credential:resp.credential})});
+      A.user=d.usuario; pintarAuth(); await cargarLotes(); renderLotes();
+      if(A.pendienteGuardar){ A.pendienteGuardar=false; showTab("calc"); abrirGuardar(); }
+    }catch(e){ alertaLotes(e.message); }
+  }
+  async function salir(){ try{ await API('auth/salir',{method:'POST'}); }catch(e){} A.user=null; A.lotes=[]; pintarAuth(); renderLotes(); }
+
+  function pintarAuth(){
+    const el=$("auth"); el.innerHTML='';
+    if(A.user){
+      const b=document.createElement('button'); b.className='who'; b.title='Mis lotes';
+      b.innerHTML=(A.user.foto?`<img src="${esc(A.user.foto)}" alt="" referrerpolicy="no-referrer">`:`<span class="ini">${esc((A.user.nombre||A.user.email||'?')[0].toUpperCase())}</span>`)+`<span>${esc((A.user.nombre||A.user.email).split(' ')[0])}</span>`;
+      b.onclick=()=>showTab("lotes"); el.appendChild(b);
+    }else{
+      const b=document.createElement('button'); b.className='gbtn'; b.innerHTML=GSVG+' Ingresar'; b.onclick=()=>showTab("lotes"); el.appendChild(b);
+    }
+  }
+
+  /* --- datos --- */
+  async function cargarLotes(){ if(!A.user) return; A.cargando=true; try{ const d=await API('lotes'); A.lotes=d.lotes; }catch(e){ if(e.status===401){A.user=null; pintarAuth();} } A.cargando=false; }
+  function alertaLotes(t){ const b=$("lotesBody"); const m=document.createElement('div'); m.className='msg err'; m.textContent=t; b.prepend(m); }
+
+  /* --- guardar desde la calculadora --- */
+  function abrirGuardar(){
+    if(!A.user){ A.pendienteGuardar=true; showTab("lotes"); return; }
+    const c=catObj(); const hoy=new Date().toLocaleDateString('es-UY');
+    $("loteNombre").value = `${c.n} · ${$("cab").value} cab. · ${hoy}`;
+    $("saveMsg").textContent=''; $("saveBox").classList.remove("hide"); $("loteNombre").focus(); $("loteNombre").select();
+  }
+  $("saveBtn").onclick=abrirGuardar;
+  $("saveCancel").onclick=()=>$("saveBox").classList.add("hide");
+  $("saveOk").onclick=async()=>{
+    const e=estadoActual(); const v=valuar(e); const m=$("saveMsg");
+    m.className='msg'; m.textContent='Guardando…';
+    try{ await API('lotes',{method:'POST',body:JSON.stringify({nombre:$("loteNombre").value, parametros:e, valuacion:valToPayload(v,'Valor al guardar')})});
+      await cargarLotes(); m.className='msg ok'; m.innerHTML='✔ Guardado. <a href="#" id="verLotes">Ver mis lotes</a>';
+      $("verLotes").onclick=(ev)=>{ev.preventDefault(); $("saveBox").classList.add("hide"); showTab("lotes");};
+    }catch(err){ m.className='msg err'; m.textContent=err.message; }
+  };
+
+  /* --- vista Mis lotes --- */
+  function spark(vals){
+    if(vals.length<2) return '';
+    const W=300,H=46,p=4, ys=vals.map(v=>v.total), mn=Math.min(...ys), mx=Math.max(...ys), r=mx-mn||1;
+    const pts=ys.map((y,i)=>[p+i*(W-2*p)/(ys.length-1), H-p-(y-mn)/r*(H-2*p)]);
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Evolución del valor"><polyline fill="none" stroke="#17573f" stroke-width="2.5" points="${pts.map(x=>x.map(n=>n.toFixed(1)).join(',')).join(' ')}"/>${pts.map(x=>`<circle cx="${x[0].toFixed(1)}" cy="${x[1].toFixed(1)}" r="3" fill="#17573f"/>`).join('')}</svg>`;
+  }
+  const money = n => n==null||!isFinite(n) ? '—' : 'US$ '+fmt(n,0);
+  const sign = n => (n>=0?'▲ +':'▼ ')+fmt(Math.abs(n),1)+'%';
+
+  window.renderLotes = async function(){
+    const b=$("lotesBody");
+    if(!A.cfg){ b.innerHTML='<div class="empty">Cargando…</div>'; return; }
+    if(!A.user){
+      b.innerHTML=`<div class="benef">
+        <div><b>📁 Guardá tus lotes</b>Categoría, cabezas, peso, raza y comentarios, todo en tu cuenta.</div>
+        <div><b>📈 Seguimiento</b>Mirá cuánto vale cada lote hoy y cuánto cambió desde que lo guardaste.</div>
+        <div><b>⚖️ Registrá pesadas</b>Actualizá peso y cabezas y queda el historial de cada lote.</div>
+        <div><b>📤 Exportá</b>Descargá tus lotes en Excel (CSV) cuando quieras.</div></div>
+        <div style="margin-top:18px;text-align:center"><p style="font-weight:700;margin-bottom:10px">Ingresá con tu cuenta de Google para empezar</p><div id="gbox" style="display:inline-block"></div></div>`;
+      botonGoogle($("gbox")); return;
+    }
+    if(A.cargando){ b.innerHTML='<div class="empty">Cargando tus lotes…</div>'; return; }
+    const filas=A.lotes.map(l=>{ const hoy=valuar(l.parametros); const vs=l.valuaciones; const prim=vs[0]; return {l,hoy,prim,vs}; });
+    const totHoy=filas.reduce((a,f)=>a+(f.hoy?f.hoy.total:0),0), totIni=filas.reduce((a,f)=>a+(f.prim?f.prim.total:0),0);
+    const cabs=filas.reduce((a,f)=>a+(+f.l.parametros.cab||0),0);
+    let html=`<div class="sum">
+      <div class="kpi"><div class="k">Lotes guardados</div><div class="v">${filas.length}</div><div class="d">${fmt(cabs)} cabezas</div></div>
+      <div class="kpi"><div class="k">Valor total hoy</div><div class="v">${money(totHoy)}</div><div class="d">precios al ${UPDATED}</div></div>
+      <div class="kpi"><div class="k">Cambio desde que guardaste</div><div class="v ${totHoy>=totIni?'up':'dn'}" style="color:${totHoy>=totIni?'var(--g700)':'#b3261e'}">${totIni?sign((totHoy/totIni-1)*100):'—'}</div><div class="d">${totIni?money(totHoy-totIni):''}</div></div></div>
+      <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn pri" id="nuevoLote" style="flex:0 0 auto">➕ Nuevo lote</button>
+        <button class="btn" id="exportar" style="flex:0 0 auto">📤 Descargar en Excel (CSV)</button>
+        <button class="btn" id="salir" style="flex:0 0 auto">Cerrar sesión</button></div>`;
+    if(!filas.length) html+=`<div class="empty">Todavía no guardaste lotes. Calculá uno en la Calculadora y tocá <b>💾 Guardar en mis lotes</b>.</div>`;
+    for(const f of filas){
+      const l=f.l, p=l.parametros, c=f.hoy&&f.hoy.cat;
+      const dif=f.prim&&f.hoy? (f.hoy.total/f.prim.total-1)*100 : null;
+      html+=`<div class="lote" data-id="${l.id}">
+        <div class="top"><div><h3>${esc(l.nombre)}</h3><div class="meta">${esc(c?c.n:p.cat)} · ${fmt(+p.cab||0)} cab.${c&&c.u!=="cab"?` · ${fmt(+p.peso||0)} kg prom.`:''}${c&&c.preg?` · preñez ${p.mes} meses`:''} · ${esc(p.raza)} · ${esc(p.cal)}</div></div>
+        <span class="pill ${f.hoy?f.hoy.certeza:'baja'}">${f.hoy?({alta:'Certeza alta',media:'Certeza media',baja:'Certeza baja'})[f.hoy.certeza]:''}</span></div>
+        <div class="vals">
+          <div><small>Al guardarlo (${f.prim?new Date(f.prim.fecha).toLocaleDateString('es-UY'):'—'})</small><b>${money(f.prim&&f.prim.total)}</b></div>
+          <div><small>Hoy</small><b>${money(f.hoy&&f.hoy.total)}</b></div>
+          <div><small>Cambio</small><b style="color:${dif==null?'inherit':dif>=0?'var(--g700)':'#b3261e'}">${dif==null?'—':sign(dif)}</b></div></div>
+        ${spark(f.vs)}
+        ${l.notas?`<div class="meta" style="margin-top:6px">📝 ${esc(l.notas)}</div>`:''}
+        <div class="acts">
+          <button data-a="abrir">🧮 Abrir en calculadora</button>
+          <button data-a="revaluar">🔄 Registrar valor de hoy</button>
+          <button data-a="editar">⚖️ Actualizar peso / cabezas</button>
+          <button data-a="hist">📋 Historial (${f.vs.length})</button>
+          <button data-a="borrar" class="del">🗑 Eliminar</button></div>
+        <div class="slot"></div></div>`;
+    }
+    b.innerHTML=html;
+    $("salir").onclick=salir;
+    $("nuevoLote").onclick=()=>showTab("calc");
+    $("exportar").onclick=()=>exportarCSV(filas);
+    b.querySelectorAll('.lote').forEach(card=>{
+      const id=+card.dataset.id, f=filas.find(x=>x.l.id===id), slot=card.querySelector('.slot');
+      card.querySelectorAll('.acts button').forEach(btn=>btn.onclick=async()=>{
+        const a=btn.dataset.a;
+        if(a==='abrir'){ showTab("calc"); cargarEstado(f.l.parametros); }
+        if(a==='revaluar'){ btn.disabled=true; try{ await API(`lotes/${id}/valuaciones`,{method:'POST',body:JSON.stringify(valToPayload(f.hoy,'Valor del día'))}); await cargarLotes(); renderLotes(); }catch(e){ alertaLotes(e.message); btn.disabled=false; } }
+        if(a==='editar'){
+          const p=f.l.parametros;
+          slot.innerHTML=`<div class="edit"><div><label>Cabezas</label><input type="number" min="1" value="${+p.cab||0}" data-k="cab"></div>
+            ${f.hoy.cat.u!=="cab"?`<div><label>Peso promedio (kg)</label><input type="number" min="1" value="${+p.peso||0}" data-k="peso"></div>`:''}
+            ${f.hoy.cat.preg?`<div><label>Meses de preñez</label><input type="number" min="1" max="9" value="${p.mes||5}" data-k="mes"></div>`:''}
+            <div style="grid-column:1/-1"><label>Nota (opcional)</label><input type="text" maxlength="200" placeholder="Ej: pesada del 20/11" data-k="nota"></div>
+            <div style="grid-column:1/-1;display:flex;gap:8px"><button class="btn pri" data-s="ok">Guardar pesada</button><button class="btn" data-s="no">Cancelar</button></div></div>`;
+          slot.querySelector('[data-s=no]').onclick=()=>slot.innerHTML='';
+          slot.querySelector('[data-s=ok]').onclick=async()=>{
+            const np={...p}; slot.querySelectorAll('input[type=number]').forEach(i=>np[i.dataset.k]=+i.value);
+            const nota=slot.querySelector('[data-k=nota]').value; const v=valuar(np);
+            try{ await API(`lotes/${id}`,{method:'PATCH',body:JSON.stringify({parametros:np})});
+              await API(`lotes/${id}/valuaciones`,{method:'POST',body:JSON.stringify(valToPayload(v,nota||'Actualización de peso/cabezas'))});
+              await cargarLotes(); renderLotes(); }catch(e){ alertaLotes(e.message); }
+          };
+        }
+        if(a==='hist'){
+          slot.innerHTML=`<div class="scroll" style="margin-top:10px"><table class="tbl"><thead><tr><th>Fecha</th><th>Cabezas</th><th>Peso</th><th>Por cabeza</th><th>Total</th><th>Nota</th></tr></thead><tbody>${
+            f.vs.slice().reverse().map(v=>`<tr><td>${new Date(v.fecha).toLocaleDateString('es-UY')}</td><td>${fmt(v.cabezas||0)}</td><td>${v.peso?fmt(v.peso)+' kg':'—'}</td><td>${money(v.por_cabeza)}</td><td><b>${money(v.total)}</b></td><td style="text-align:left">${esc(v.nota)}</td></tr>`).join('')}</tbody></table></div>`;
+        }
+        if(a==='borrar'){
+          slot.innerHTML=`<div class="savebox"><b>¿Eliminar "${esc(f.l.nombre)}" y todo su historial?</b> No se puede deshacer.<div class="act"><button class="btn" data-s="si" style="background:#b3261e;color:#fff">Sí, eliminar</button><button class="btn" data-s="no">Cancelar</button></div></div>`;
+          slot.querySelector('[data-s=no]').onclick=()=>slot.innerHTML='';
+          slot.querySelector('[data-s=si]').onclick=async()=>{ try{ await API(`lotes/${id}`,{method:'DELETE'}); await cargarLotes(); renderLotes(); }catch(e){ alertaLotes(e.message); } };
+        }
+      });
+    });
+  };
+
+  function exportarCSV(filas){
+    const q=s=>`"${String(s??'').replace(/"/g,'""')}"`;
+    const rows=[['Lote','Categoría','Cabezas','Peso (kg)','Raza','Calidad','Valor al guardar (US$)','Fecha guardado','Valor hoy (US$)','Cambio %','Certeza','Notas']];
+    for(const f of filas){ const p=f.l.parametros, dif=f.prim&&f.hoy?((f.hoy.total/f.prim.total-1)*100).toFixed(1):'';
+      rows.push([f.l.nombre, f.hoy?f.hoy.cat.n:p.cat, p.cab, p.peso, p.raza, p.cal, f.prim?Math.round(f.prim.total):'', f.prim?f.prim.fecha.slice(0,10):'', f.hoy?Math.round(f.hoy.total):'', dif, f.hoy?f.hoy.certeza:'', f.l.notas]); }
+    const blob=new Blob(['﻿'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mis-lotes-cuantolaventa.csv'; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  /* --- arranque --- */
+  (async()=>{
+    try{ A.cfg=await API('config'); }catch(e){ A.cfg={googleClientId:'',baseDatos:false}; }
+    if(A.cfg.baseDatos){ try{ const d=await API('yo'); A.user=d.usuario; }catch(e){} }
+    pintarAuth(); if(A.user) await cargarLotes();
+    if(!$("vLotes").classList.contains("hide")) renderLotes();
+  })();
+})();
 </script>
 </body>
 </html>
