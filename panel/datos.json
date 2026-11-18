@@ -1,0 +1,368 @@
+{
+ "semana": "2026-11-16",
+ "actualizado": "2026-11-18",
+ "precios": [
+  {
+   "categoria": "Terneros",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 4.3,
+   "anterior": 4.41,
+   "comparacion": "Nov vs oct",
+   "fuentes": 5,
+   "certeza": "Media"
+  },
+  {
+   "categoria": "Terneras",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 4.23,
+   "anterior": 4.24,
+   "comparacion": "Nov vs oct",
+   "fuentes": 5,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 2.71,
+   "anterior": 2.68,
+   "comparacion": "Nov vs oct",
+   "fuentes": 5,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Novillos 1–2 años",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 3.66,
+   "anterior": 3.69,
+   "comparacion": "Nov vs oct",
+   "fuentes": 3,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Novillos 2–3 años",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 3.43,
+   "anterior": 3.43,
+   "comparacion": "Nov vs oct",
+   "fuentes": 4,
+   "certeza": "Media"
+  },
+  {
+   "categoria": "Vaquillonas 1–2 años",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 3.64,
+   "anterior": 3.71,
+   "comparacion": "Nov vs oct",
+   "fuentes": 4,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Vacas preñadas",
+   "especie": "Vacunos",
+   "grupo": "Cría",
+   "unidad": "US$/cab",
+   "actual": 1357.63,
+   "anterior": 1295.0,
+   "comparacion": "Nov vs oct",
+   "fuentes": 4,
+   "certeza": "Media"
+  },
+  {
+   "categoria": "Vientres entorados",
+   "especie": "Vacunos",
+   "grupo": "Cría",
+   "unidad": "US$/cab",
+   "actual": 1109.98,
+   "anterior": 1083.5,
+   "comparacion": "Nov vs oct",
+   "fuentes": 4,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Piezas de cría",
+   "especie": "Vacunos",
+   "grupo": "Cría",
+   "unidad": "US$/cab",
+   "actual": 827.16,
+   "anterior": 794.77,
+   "comparacion": "Nov vs oct",
+   "fuentes": 3,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Novillos Holando",
+   "especie": "Vacunos",
+   "grupo": "Reposición",
+   "unidad": "US$/kg",
+   "actual": 3.1,
+   "anterior": 3.04,
+   "comparacion": "Nov vs oct",
+   "fuentes": 3,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Novillo gordo",
+   "especie": "Vacunos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 5.96,
+   "anterior": 6.0,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 3,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Vaca gorda",
+   "especie": "Vacunos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 5.56,
+   "anterior": 5.66,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 3,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Vaquillona gorda",
+   "especie": "Vacunos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 5.87,
+   "anterior": 5.89,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 3,
+   "certeza": "Alta"
+  },
+  {
+   "categoria": "Cordero gordo",
+   "especie": "Ovinos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 6.57,
+   "anterior": 6.54,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 1,
+   "certeza": "Baja"
+  },
+  {
+   "categoria": "Borrego gordo",
+   "especie": "Ovinos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 6.56,
+   "anterior": 6.54,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 1,
+   "certeza": "Baja"
+  },
+  {
+   "categoria": "Capón",
+   "especie": "Ovinos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 5.59,
+   "anterior": 5.56,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 1,
+   "certeza": "Baja"
+  },
+  {
+   "categoria": "Oveja gorda",
+   "especie": "Ovinos",
+   "grupo": "Gordo",
+   "unidad": "US$/kg carcasa",
+   "actual": 5.49,
+   "anterior": 5.44,
+   "comparacion": "Semana vs semana anterior",
+   "fuentes": 1,
+   "certeza": "Baja"
+  }
+ ],
+ "historia": [
+  {
+   "categoria": "Terneros",
+   "fecha": "2025-10-13",
+   "valor": 3.55
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-02-16",
+   "valor": 3.55
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-02-23",
+   "valor": 3.67
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-04-27",
+   "valor": 4.14
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-06-29",
+   "valor": 4.18
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-08-10",
+   "valor": 4.32
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-08-31",
+   "valor": 4.58
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-10-26",
+   "valor": 4.51
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-11-02",
+   "valor": 4.58
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-11-09",
+   "valor": 4.58
+  },
+  {
+   "categoria": "Terneros",
+   "fecha": "2026-11-16",
+   "valor": 4.49
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-02-16",
+   "valor": 2.3
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-02-23",
+   "valor": 2.36
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-04-27",
+   "valor": 2.3
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-06-29",
+   "valor": 2.32
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-08-10",
+   "valor": 2.45
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-08-31",
+   "valor": 2.6
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-09-21",
+   "valor": 2.5
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-10-26",
+   "valor": 2.6
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-11-02",
+   "valor": 2.63
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-11-09",
+   "valor": 2.62
+  },
+  {
+   "categoria": "Vacas de invernada",
+   "fecha": "2026-11-16",
+   "valor": 2.64
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2025-11-24",
+   "valor": 5.15
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-06-15",
+   "valor": 5.58
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-08-10",
+   "valor": 5.81
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-08-31",
+   "valor": 5.98
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-09-21",
+   "valor": 5.78
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-10-26",
+   "valor": 6.0
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-11-02",
+   "valor": 6.01
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-11-09",
+   "valor": 6.0
+  },
+  {
+   "categoria": "Novillo gordo",
+   "fecha": "2026-11-16",
+   "valor": 5.96
+  }
+ ],
+ "fuentes": [
+  {
+   "nombre": "Informe semanal de consignatarios (semana 46)",
+   "url": "https://todoelcampo.com.uy/archives/51882"
+  },
+  {
+   "nombre": "Relevamiento oficial al 07/11 (vía Blasina y Asociados)",
+   "url": "https://blasinayasociados.com/se-alargan-las-entradas-y-el-novillo-se-equilibra-en-us-6/"
+  },
+  {
+   "nombre": "Negocios de campo (El Observador, 06/11)",
+   "url": "https://www.elobservador.com.uy/agro/noviembre-comenzo-nuevos-records-la-ganaderia-n6063017"
+  },
+  {
+   "nombre": "Remates por pantalla de octubre y noviembre",
+   "url": "https://prensamercosur.org/2026/11/07/con-conformidad-cerro-el-remate-330-de-plaza-rural/"
+  }
+ ]
+}
