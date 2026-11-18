@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CuántoLaVenta · Calculadora de ganado Uruguay</title>
+<meta name="description" content="Calculá el valor de tu lote de vacunos u ovinos con los precios de los últimos remates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#0b2e22; --g800:#11402f; --g700:#17573f; --g600:#1f7350; --g500:#2e9466;
+  --g400:#5cb88a; --g300:#9ad6b4; --g200:#cdebd9; --g100:#e9f6ee; --g50:#f5fbf7;
+  --ink:#10251c; --muted:#5b7368; --line:#d6e7dd; --white:#fff; --warn:#a15c00;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--g50);color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+/* Header */
+header{background:linear-gradient(135deg,var(--g900),var(--g700));color:#fff;padding:26px 0 70px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;right:-80px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(154,214,180,.25),transparent 70%)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:var(--g400);display:grid;place-items:center}
+.brand h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.brand small{display:block;font-size:13px;color:var(--g300);font-weight:500}
+.hero{margin-top:22px;max-width:640px}
+.hero p{font-size:17px;color:var(--g200)}
+.upd{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:6px 12px;border-radius:999px;font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--g400);box-shadow:0 0 0 4px rgba(92,184,138,.25)}
+
+main{margin-top:-48px;position:relative;z-index:1;padding-bottom:40px}
+.card{background:var(--white);border-radius:var(--r);box-shadow:0 10px 30px rgba(11,46,34,.08);border:1px solid var(--line)}
+
+/* Tabs */
+.seg{display:flex;gap:6px;background:var(--g100);padding:5px;border-radius:12px}
+.seg button{flex:1;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-weight:600;cursor:pointer;color:var(--g700);font-size:15px}
+.seg button.on{background:var(--white);color:var(--g900);box-shadow:0 2px 8px rgba(11,46,34,.1)}
+
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.form{padding:22px}
+.form h2,.res h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+label{display:block;font-size:13px;font-weight:600;color:var(--g800);margin-bottom:6px}
+input[type=number],select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;background:var(--white);font-size:16px;outline:none;transition:border .15s}
+input:focus,select:focus{border-color:var(--g500)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.cat{border:1.5px solid var(--line);background:var(--white);border-radius:12px;padding:10px;text-align:left;cursor:pointer;transition:.15s}
+.cat b{display:block;font-size:14px}
+.cat span{font-size:11.5px;color:var(--muted)}
+.cat:hover{border-color:var(--g400)}
+.cat.on{border-color:var(--g600);background:var(--g100);box-shadow:inset 0 0 0 1px var(--g600)}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--g800)}
+.chip.on{background:var(--g700);color:#fff;border-color:var(--g700)}
+
+.months{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.months button{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:8px 0;font-weight:700;cursor:pointer;font-size:14px}
+.months button.on{background:var(--g600);border-color:var(--g600);color:#fff}
+.hide{display:none!important}
+
+/* Result */
+.res{padding:22px;position:sticky;top:14px;align-self:start}
+.total{background:linear-gradient(135deg,var(--g800),var(--g600));color:#fff;border-radius:14px;padding:20px}
+.total .lbl{font-size:13px;color:var(--g200);font-weight:600}
+.total .big{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-top:4px}
+.total .sub{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.total .sub div{font-size:13px;color:var(--g200)}
+.total .sub b{display:block;color:#fff;font-size:17px}
+.range{margin-top:10px;font-size:13px;color:var(--g200)}
+
+.src{margin-top:16px}
+.srow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:center}
+.srow:last-child{border-bottom:0}
+.sname{font-weight:700;font-size:14px}
+.sdate{font-size:11.5px;color:var(--muted)}
+.sval{text-align:right;font-weight:700;font-size:15px}
+.sval small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.bar{grid-column:1/-1;height:6px;background:var(--g100);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--g500);border-radius:9px}
+.na{color:var(--muted);font-weight:500;font-size:13px}
+
+.roles{margin-top:16px;background:var(--g50);border:1px solid var(--line);border-radius:12px;padding:14px}
+.roles .r{display:flex;justify-content:space-between;font-size:14px;padding:4px 0}
+.roles .r b{font-weight:700}
+.roles .r.hl{color:var(--g700);font-weight:700;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+
+.adv{margin-top:16px}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--g800)}
+.btns{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;border:0;border-radius:11px;padding:12px;font-weight:700;cursor:pointer;background:var(--g100);color:var(--g800)}
+.btn.pri{background:var(--g700);color:#fff}
+
+/* Market table */
+section.mkt{margin-top:22px;padding:22px}
+.mkt h2{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.mkt p.lead{color:var(--muted);font-size:14px;margin-top:4px}
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.tbl th{text-align:right;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:8px 8px;border-bottom:2px solid var(--line);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td{text-align:right;padding:9px 8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tbl tr:hover td{background:var(--g50)}
+.tbl .u{color:var(--muted);font-size:12px}
+.scroll{overflow-x:auto}
+.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+@media(max-width:760px){.cards4{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--g50);border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi .k{font-size:12px;color:var(--muted);font-weight:600}
+.kpi .v{font-size:22px;font-weight:800;color:var(--g800);margin-top:2px}
+.kpi .d{font-size:11.5px;color:var(--muted)}
+
+textarea{width:100%;min-height:92px;padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;font:inherit;font-size:15px;resize:vertical;outline:none}
+textarea:focus{border-color:var(--g500)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;border:1px solid}
+.tag.up{background:var(--g100);color:var(--g700);border-color:var(--g300)}
+.tag.dn{background:#fff4e8;color:var(--warn);border-color:#f3d2a8}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.sugg button{border:1px dashed var(--g300);background:#fff;border-radius:999px;padding:4px 10px;font-size:12px;color:var(--g700);cursor:pointer}
+.adjbox{margin-top:12px;background:var(--g50);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.adjbox .r{display:flex;justify-content:space-between;padding:3px 0}
+.adjbox .r b.up{color:var(--g700)} .adjbox .r b.dn{color:var(--warn)}
+.tabs{display:flex;gap:6px;background:var(--white);padding:6px;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(11,46,34,.08);margin-bottom:16px;max-width:420px}
+.tabs button{flex:1;border:0;background:transparent;padding:11px 14px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--g700);font-size:15px;transition:background-color .15s ease-out,color .15s ease-out}
+.tabs button.on{background:var(--g700);color:#fff}
+.tabs button:active,.btn:active,.chip:active,.cat:active{transform:scale(.97)}
+.hist{padding:22px}
+.hist h2{font-size:20px;font-weight:800}
+.chart{margin-top:16px;background:var(--g50);border:1px solid var(--line);border-radius:14px;padding:12px 8px 6px;position:relative}
+.chart svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--g900);color:#fff;font-size:12.5px;padding:7px 10px;border-radius:8px;white-space:nowrap;opacity:0;transform:translate(-50%,-110%);transition:opacity .12s ease-out}
+.tip b{font-size:14px}
+.hcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.linkbtn{border:0;background:none;color:var(--g700);font-weight:700;cursor:pointer;font-size:13.5px;margin-top:10px;text-decoration:underline}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+footer{background:var(--g900);color:var(--g200);padding:26px 0;font-size:13px}
+footer a{color:var(--g300)}
+.note{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0b2e22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7c1 2 3 3 5 3h6c2 0 4-1 5-3"/><path d="M6 10v5a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-5"/><path d="M10 14h.01M14 14h.01"/><path d="M3 5l2 2M21 5l-2 2"/></svg>
+      </div>
+      <div><h1>CuántoLaVenta</h1><small>cuantolaventa · Calculadora de ganado Uruguay</small></div>
+    </div>
+    <div class="hero">
+      <p>Ingresá tu lote y mirá cuánto vale hoy según los últimos remates por pantalla y los precios de referencia del mercado.</p>
+      <div class="upd"><span class="dot"></span><span id="updTxt">Precios al 18/11/2026</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tabs" id="tabs">
+    <button class="on" data-t="calc">🧮 Calculadora</button>
+    <button data-t="hist">📈 Historial de precios</button>
+  </div>
+  <div id="vCalc">
+  <div class="grid">
+    <!-- FORM -->
+    <div class="card form">
+      <div class="seg" id="especie">
+        <button class="on" data-v="vac">🐄 Vacunos</button>
+        <button data-v="ovi">🐑 Ovinos</button>
+      </div>
+
+      <div style="margin-top:20px">
+        <h2>1 · Categoría</h2>
+        <div class="cats" id="cats"></div>
+      </div>
+
+      <div id="preWrap" class="hide" style="margin-top:18px">
+        <label>¿De cuántos meses está preñada?</label>
+        <div class="months" id="months"></div>
+        <div class="hint" id="mesHint">Preñez de 5 meses</div>
+      </div>
+
+      <div style="margin-top:18px">
+        <h2>2 · Tu lote</h2>
+        <div class="row">
+          <div><label for="cab">Cantidad de cabezas</label><input type="number" id="cab" min="1" value="50" inputmode="numeric"></div>
+          <div id="pesoWrap"><label for="peso">Peso promedio (kg)</label><input type="number" id="peso" min="20" value="180" inputmode="numeric"><div class="hint" id="pesoHint"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px">
+        <label>Raza</label>
+        <div class="chips" id="razas"></div>
+      </div>
+
+      <div style="margin-top:16px">
+        <label>Calidad / estado del lote</label>
+        <div class="chips" id="calidad"></div>
+      </div>
+
+      <div style="margin-top:18px">
+        <h2>3 · Comentario del lote</h2>
+        <label for="coment">Contá cómo es el lote: estado, sanidad, manejo, defectos…</label>
+        <textarea id="coment" placeholder="Ej: terneros destetados y castrados, muy parejos, buen estado, sanidad al día, mansos. Algo de garrapata."></textarea>
+        <div class="sugg" id="sugg"></div>
+        <div class="tags" id="tags"></div>
+      </div>
+
+      <div class="adv">
+        <details>
+          <summary>Ajustes avanzados (comisión, rendimiento, precio propio)</summary>
+          <div class="row">
+            <div><label for="com">Comisión consignatario (%)</label><input type="number" id="com" value="3" step="0.25" min="0"></div>
+            <div><label for="gas">Otros gastos venta (%)</label><input type="number" id="gas" value="1.5" step="0.25" min="0"><div class="hint">Guías, flete, seguro, etc.</div></div>
+          </div>
+          <div class="row" id="rendWrap">
+            <div><label for="rend">Rendimiento carcasa (%)</label><input type="number" id="rend" value="52" step="0.5"></div>
+            <div></div>
+          </div>
+          <div class="row">
+            <div><label for="own">Precio propio (opcional)</label><input type="number" id="own" step="0.01" placeholder="Ej: 4,50"><div class="hint" id="ownHint">US$/kg</div></div>
+            <div></div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="card res">
+      <h2>Valor estimado del lote</h2>
+      <div class="total">
+        <div class="lbl" id="tLbl">Promedio de mercado</div>
+        <div class="big" id="tBig">US$ 0</div>
+        <div class="sub">
+          <div>Por cabeza<b id="tCab">—</b></div>
+          <div id="tKgW">Por kilo<b id="tKg">—</b></div>
+          <div>Kilos totales<b id="tKgs">—</b></div>
+        </div>
+        <div class="range" id="tRange"></div>
+      </div>
+
+      <div class="adjbox" id="adjbox"></div>
+      <div class="src" id="srcList"></div>
+
+      <div class="roles" id="roles"></div>
+
+      <div class="btns">
+        <button class="btn" id="copyBtn">Copiar resumen</button>
+        <button class="btn pri" id="waBtn">Compartir por WhatsApp</button>
+      </div>
+      <p class="note" id="noteTxt"></p>
+      <button class="linkbtn" id="toHist">📈 Ver cómo valió esta categoría en el tiempo</button>
+    </div>
+  </div>
+
+  </div><!-- /vCalc -->
+
+  <!-- HISTORIAL -->
+  <section class="card hist hide" id="vHist">
+    <h2>¿Cuánto valió cada categoría?</h2>
+    <p class="lead" style="color:var(--muted);font-size:14px;margin-top:4px">Elegí la categoría y mirá cómo se movió el precio en el tiempo.</p>
+    <div class="seg" id="hEsp" style="margin-top:14px;max-width:340px">
+      <button class="on" data-v="vac">🐄 Vacunos</button>
+      <button data-v="ovi">🐑 Ovinos</button>
+    </div>
+    <div class="hcats" id="hCats"></div>
+    <div class="cards4" id="hKpis"></div>
+    <div class="chart" id="hChart"><div class="tip" id="tip"></div></div>
+    <p class="note" id="hNote"></p>
+  </section>
+
+  <div id="vCalc2">
+  <!-- MARKET TABLE -->
+  <section class="card mkt">
+    <h2>Pizarra de precios</h2>
+    <p class="lead">Promedios de los últimos remates y de la grilla semanal de la referencia. Vacunos de reposición en US$/kg en pie salvo indicación.</p>
+    <div class="cards4" id="kpis"></div>
+    <div class="scroll"><table class="tbl" id="tbl"></table></div>
+    <p class="note">Referencia semanal: precios de referencia del mercado (gordo en US$/kg carcasa). Remates 1, 2 y 3: promedios de remates por pantalla de noviembre 2026. “—” = sin oferta o sin dato en ese remate; el promedio se calcula con las fuentes disponibles.</p>
+  </section>
+  </div><!-- /vCalc2 -->
+</main>
+
+<footer>
+  <div class="wrap">
+    <b style="color:#fff">CuántoLaVenta</b> · Herramienta de referencia para productores, compradores, vendedores y consignatarios. Los valores son estimaciones basadas en promedios públicos de remates; cada lote se negocia según su calidad, sanidad, plazo y condiciones.
+  </div>
+</footer>
+
+<script>
+/* ============ DATOS DE MERCADO ============
+   Editá este bloque para actualizar precios.
+   u: "kg" = US$/kg en pie · "cab" = US$ por cabeza · "carc" = US$/kg carcasa
+*/
+const UPDATED = "18/11/2026";
+const SOURCES = {
+  ref: {name:"Referencia semanal", date:"Semana al 02/11"},
+  r1:  {name:"Remate 1", date:"05–06/11"},
+  r2:  {name:"Remate 2", date:"12–13/11"},
+  r3: {name:"Remate 3", date:"04/11"}
+};
+
+const VAC = [
+  {id:"ternero", n:"Terneros", d:"Machos al destete", u:"kg", peso:180,
+    p:{ref:4.58, r1:4.11, r2:4.01, r3:4.60},
+    br:{ // precio por franja de peso cuando el remate lo publicó
+      lt140:{r1:6.56}, b140:{r1:5.00, r2:4.85}, gt180:{r1:3.92, r2:3.89, r3:4.43}
+    }},
+  {id:"ternera", n:"Terneras", d:"Hembras al destete", u:"kg", peso:170,
+    p:{ref:4.36, r1:4.33, r2:3.97, r3:4.23},
+    br:{lt140:{r2:4.78}, gt140:{r2:3.90}}},
+  {id:"mixto", n:"Terneros y terneras", d:"Lote mixto", u:"kg", peso:170,
+    p:{r1:4.11, r2:4.42}},
+  {id:"nov12", n:"Novillos 1–2 años", d:"Recría", u:"kg", peso:280,
+    p:{r1:3.69, r2:3.62}},
+  {id:"nov23", n:"Novillos 2–3 años", d:"Invernada", u:"kg", peso:360,
+    p:{r1:3.30, r2:3.28, r3:3.70}},
+  {id:"nov3", n:"Novillos +3 años", d:"Invernada pesada", u:"kg", peso:420,
+    p:{r1:3.29, r2:3.24}},
+  {id:"vaq12", n:"Vaquillonas 1–2 años", d:"Sin servicio", u:"kg", peso:260,
+    p:{r1:3.78, r2:3.43, r3:3.70}},
+  {id:"vaq2", n:"Vaquillonas +2 años", d:"Sin servicio", u:"kg", peso:330,
+    p:{r1:3.38, r2:3.47}},
+  {id:"vinv", n:"Vacas de invernada", d:"Vacías, para engorde", u:"kg", peso:380,
+    p:{ref:2.63, r1:2.78, r2:2.77, r3:2.65}},
+  {id:"vpre", n:"Vacas preñadas", d:"Vientres con diagnóstico", u:"cab", preg:true,
+    p:{r1:1383.88, r2:1276, r3:1413}},
+  {id:"vqpre", n:"Vaquillonas preñadas", d:"Primera preñez", u:"cab", preg:true,
+    p:{r1:1383.88, r2:1327, r3:1413}},
+  {id:"ento", n:"Vientres entorados", d:"Con toro, sin diagnóstico", u:"cab",
+    p:{r1:1154.95, r2:1130, r3:1045}},
+  {id:"cria", n:"Piezas de cría", d:"Vaca con ternero al pie", u:"cab",
+    p:{r1:827.32, r2:827}},
+  {id:"holando", n:"Holando", d:"Machos de reposición", u:"kg", peso:300,
+    p:{r1:3.25, r2:2.95}},
+  {id:"toro", n:"Toros", d:"Reproductores", u:"cab",
+    p:{r3:3080}},
+  {id:"gnov", n:"Novillo gordo", d:"Para faena", u:"carc", peso:520, rend:54,
+    p:{ref:6.01}},
+  {id:"gvaca", n:"Vaca gorda", d:"Para faena", u:"carc", peso:470, rend:50,
+    p:{ref:5.67}},
+  {id:"gvaq", n:"Vaquillona gorda", d:"Para faena", u:"carc", peso:400, rend:52,
+    p:{ref:5.91}}
+];
+
+const OVI = [
+  {id:"cordero", n:"Corderos/as", d:"Reposición", u:"cab", p:{r1:92}},
+  {id:"borrego", n:"Borregos/as", d:"2 dientes", u:"cab", p:{r1:96, r2:78}},
+  {id:"ovcria", n:"Ovejas de cría", d:"2 o más encarneradas", u:"cab", p:{r1:96.6}},
+  {id:"gcord", n:"Cordero gordo", d:"Para faena", u:"carc", peso:40, rend:46, p:{ref:6.52}},
+  {id:"gborr", n:"Borrego gordo", d:"Para faena", u:"carc", peso:45, rend:45, p:{ref:6.50}},
+  {id:"gcap", n:"Capón", d:"Para faena", u:"carc", peso:50, rend:44, p:{ref:5.51}},
+  {id:"goveja", n:"Oveja gorda", d:"Para faena", u:"carc", peso:48, rend:42, p:{ref:5.40}}
+];
+
+const RAZAS_VAC = [
+  {n:"Angus", f:1.04},{n:"Hereford", f:1.03},{n:"Braford", f:1.02},
+  {n:"Cruza británica", f:1.00},{n:"Cruza cebú", f:0.97},{n:"Holando", f:0.88},{n:"Otra / general", f:1.00}
+];
+const RAZAS_OVI = [
+  {n:"Merino", f:1.03},{n:"Corriedale", f:1.00},{n:"Dohne", f:1.03},{n:"Texel / carne", f:1.04},{n:"Cruza / general", f:1.00}
+];
+const CALIDAD = [{n:"Superior",f:1.06},{n:"Buena",f:1.00},{n:"Regular",f:0.92},{n:"Inferior",f:0.84}];
+
+/* Ajuste por meses de preñez (referencia: precio promedio de remate ≈ preñez media 4–5 meses) */
+const PREG = {1:0.92,2:0.93,3:0.95,4:0.98,5:1.00,6:1.02,7:1.04,8:1.05,9:1.03};
+/* Curva de peso NO lineal: el kilo liviano vale más que el kilo pesado.
+   factor = (pesoReferencia / peso) ^ elasticidad, acotado. */
+const CURVA = {ternero:[215,0.55], ternera:[205,0.50], mixto:[205,0.50], nov12:[290,0.35], nov23:[370,0.25],
+  nov3:[430,0.18], vaq12:[270,0.35], vaq2:[330,0.25], vinv:[400,0.15], holando:[300,0.30]};
+
+/* Comentario del productor: palabras que suben o bajan el lote (% de efecto) */
+const PALABRAS = [
+  // suben
+  {re:/destetad/, v:3, t:"Destetados"},
+  {re:/castrad/, v:3, t:"Castrados"},
+  {re:/parej|uniform|homog/, v:3.5, t:"Lote parejo"},
+  {re:/buen estado|buena condici|gordit|buen lomo|en carne|lindo|lindos|lindas|excelente/, v:4, t:"Buen estado"},
+  {re:/sanidad al d|vacunad|dosificad|sanidad complet|plan sanitario/, v:2.5, t:"Sanidad al día"},
+  {re:/manso|mansa|tranquil|dócil|docil/, v:1.5, t:"Mansos"},
+  {re:/definid|puro|pedigr|\bpi\b|registrad|genética|genetica|cabaña|cabana/, v:5, t:"Genética definida"},
+  {re:/export|china|cuota|trazad|certificad|bpa|orgánic|organic|natural/, v:2.5, t:"Apto exportación / certificado"},
+  {re:/ecograf|diagn[oó]stic|garant[ií]a de pre|tactad/, v:2, t:"Preñez diagnosticada"},
+  {re:/buen frame|grande|grandes|desarroll|buen tamaño/, v:2, t:"Buen desarrollo"},
+  {re:/buen acceso|sobre ruta|cerca de ruta|f[aá]cil acceso|balanza/, v:1, t:"Buen acceso"},
+  {re:/cabeza de lote|selecci|primera/, v:3, t:"Cabeza / selección"},
+  {re:/suplementad|pradera|verdeo|creep/, v:1.5, t:"Bien alimentados"},
+  // bajan
+  {re:/flac|mal estado|pobre|desnutr|huesud/, v:-7, t:"Flacos / mal estado"},
+  {re:/garrapat/, v:-5, t:"Garrapata"},
+  {re:/desparej|dispar|mezclad|variad/, v:-4.5, t:"Lote desparejo"},
+  {re:/\bcola\b|chico|chicos|achaparrad|atrasad|enan/, v:-5, t:"Cola / atrasados"},
+  {re:/brav|arisc|chúcar|chucar/, v:-3, t:"Ariscos"},
+  {re:/\benteros?\b/, v:-3, t:"Enteros"},
+  {re:/viej|refugo|descarte|boca gastada|sin diente/, v:-7, t:"Viejos / refugo"},
+  {re:/reng|lesi[oó]n|ojo|queratit|pietin|pietín|herid/, v:-5, t:"Lesiones / rengos"},
+  {re:/bicher|abichad|enferm|diarrea|tos\b|mancha|aftosa|brucel|tuberc/, v:-9, t:"Problema sanitario"},
+  {re:/sin vacun|sin sanidad|sin dosific/, v:-4, t:"Sin sanidad"},
+  {re:/lejos|dif[ií]cil acceso|sin camino|mal camino|isla/, v:-2, t:"Acceso difícil"},
+  {re:/mestiz|cruza indefinid|criollo/, v:-2.5, t:"Sin raza definida"},
+  {re:/astad|cuernos/, v:-1.5, t:"Astados"},
+  {re:/sequ[ií]a|seca|sin pasto|campo pelado/, v:-2.5, t:"Venta por seca"},
+  {re:/vac[ií]a|falladas?/, v:-4, t:"Con vacías"},
+  {re:/urgente|apurad|necesito vender/, v:-2, t:"Venta apurada"}
+];
+const NEG = /(sin|no|libre de|nada de|cero|ningún|ningun|ninguna)\s+([a-záéíóúñ]+\s+){0,1}$/;
+
+function leerComentario(txt){
+  const t = (" "+(txt||"").toLowerCase()+" ");
+  const out = [];
+  PALABRAS.forEach(w=>{
+    const m = t.match(w.re);
+    if(!m) return;
+    const antes = t.slice(Math.max(0,m.index-18), m.index);
+    let v = w.v, lbl = w.t;
+    // "sin garrapata" / "no están flacos" → invierte (más suave)
+    if(NEG.test(antes) && !/^sin /.test(w.t.toLowerCase())){
+      v = w.v<0 ? Math.abs(w.v)*0.4 : -w.v*0.8;
+      lbl = (w.v<0?"Sin ":"No ") + w.t.toLowerCase();
+    }
+    // intensificadores
+    if(/(muy|bien|super|súper|extra)\s*$/.test(antes)) v *= 1.4;
+    if(/(algo|poco|leve|un poco)\s*(de)?\s*$/.test(antes)) v *= 0.5;
+    out.push({t:lbl, v});
+  });
+  // Combinación NO lineal: los efectos se acumulan con rendimientos decrecientes (techo ±22%)
+  const suma = out.reduce((a,x)=>a+x.v,0)/100;
+  const f = 1 + 0.22*Math.tanh(suma/0.22);
+  return {items:out, f};
+}
+
+/* Tamaño del lote: lotes chicos se pagan menos, lotes grandes y parejos algo más (curva suave) */
+function factorLote(cab){
+  if(cab<=0) return 1;
+  return 1 - 0.07*Math.exp(-cab/12) + 0.02*(1-Math.exp(-cab/150));
+}
+
+/* ============ HISTORIAL ============
+   [fecha, valor]. Referencia semanal = grilla de consignatarios; Remates = promedios de remates por pantalla. */
+const HIST = {
+  ternero:{f:"Referencia semanal", d:[["2025-10-13",3.55],["2026-02-16",3.55],["2026-02-23",3.67],["2026-04-27",4.14],["2026-06-29",4.18],["2026-08-10",4.32],["2026-08-31",4.58],["2026-10-26",4.51],["2026-11-02",4.58]]},
+  ternera:{f:"Referencia semanal", d:[["2026-02-23",3.35],["2026-04-27",3.77],["2026-06-29",3.98],["2026-08-10",4.13],["2026-08-31",4.35],["2026-09-21",4.33],["2026-10-26",4.38],["2026-11-02",4.36]]},
+  mixto:{f:"Remates", d:[["2026-10-21",4.44],["2026-11-05",4.11],["2026-11-12",4.42]]},
+  nov12:{f:"Remates", d:[["2026-10-21",3.66],["2026-11-05",3.69],["2026-11-12",3.62]]},
+  nov23:{f:"Remates", d:[["2026-10-21",3.44],["2026-11-04",3.70],["2026-11-05",3.30],["2026-11-12",3.28]]},
+  nov3:{f:"Remates", d:[["2026-10-21",3.37],["2026-11-05",3.29],["2026-11-12",3.24]]},
+  vaq12:{f:"Remates", d:[["2026-10-22",3.75],["2026-11-04",3.70],["2026-11-06",3.78],["2026-11-12",3.43]]},
+  vaq2:{f:"Remates", d:[["2026-11-06",3.38],["2026-11-13",3.47]]},
+  vinv:{f:"Referencia semanal", d:[["2026-02-16",2.30],["2026-02-23",2.36],["2026-04-27",2.30],["2026-06-29",2.32],["2026-08-10",2.45],["2026-08-31",2.60],["2026-09-21",2.50],["2026-10-26",2.60],["2026-11-02",2.63]]},
+  vpre:{f:"Remates", d:[["2026-10-22",1297],["2026-11-04",1413],["2026-11-06",1384],["2026-11-12",1276],["2026-11-13",1428]]},
+  vqpre:{f:"Remates", d:[["2026-10-22",1283],["2026-11-12",1327],["2026-11-13",1245]]},
+  ento:{f:"Remates", d:[["2026-10-22",1047],["2026-11-04",1045],["2026-11-06",1155],["2026-11-12",1130]]},
+  cria:{f:"Remates", d:[["2026-10-22",791],["2026-11-05",827],["2026-11-12",827],["2026-11-13",874]]},
+  holando:{f:"Remates", d:[["2026-11-05",3.25],["2026-11-12",2.95]]},
+  toro:{f:"Remates", d:[["2026-11-04",3080]]},
+  gnov:{f:"Referencia semanal", d:[["2025-11-24",5.15],["2026-06-15",5.58],["2026-08-10",5.81],["2026-08-31",5.98],["2026-09-21",5.78],["2026-10-26",6.00],["2026-11-02",6.01]]},
+  gvaca:{f:"Referencia semanal", d:[["2025-11-24",4.78],["2026-06-15",5.21],["2026-08-10",5.42],["2026-08-31",5.67],["2026-09-21",5.39],["2026-11-02",5.67]]},
+  gvaq:{f:"Referencia semanal", d:[["2025-11-24",5.00],["2026-06-15",5.44],["2026-08-10",5.68],["2026-08-31",5.89],["2026-09-21",5.73],["2026-11-02",5.91]]},
+  cordero:{f:"Remates", d:[["2026-11-06",92]]},
+  borrego:{f:"Remates", d:[["2026-10-22",78],["2026-11-06",96]]},
+  ovcria:{f:"Remates", d:[["2026-11-06",96.6]]},
+  gcord:{f:"Referencia semanal", d:[["2025-10-13",5.48],["2025-11-24",5.75],["2026-08-10",6.25],["2026-11-02",6.52]]},
+  gborr:{f:"Referencia semanal", d:[["2025-11-24",5.74],["2026-11-02",6.50]]},
+  gcap:{f:"Referencia semanal", d:[["2026-08-10",5.30],["2026-11-02",5.51]]},
+  goveja:{f:"Referencia semanal", d:[["2026-08-10",5.15],["2026-11-02",5.40]]}
+};
+const H = {esp:"vac", cat:"ternero"};
+const MES = ["ene","feb","mar","abr","may","jun","jul","ago","set","oct","nov","dic"];
+const fd = s=>{const [y,m,d]=s.split("-");return `${+d} ${MES[+m-1]} ${y.slice(2)}`;};
+
+function renderHist(){
+  const L = H.esp==="vac"?VAC:OVI;
+  if(!L.find(c=>c.id===H.cat)) H.cat = L[0].id;
+  $("hCats").innerHTML = L.map(c=>`<button class="chip ${c.id===H.cat?"on":""}" data-id="${c.id}">${c.n}</button>`).join("");
+  $("hCats").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{H.cat=b.dataset.id; renderHist();});
+  const c = L.find(x=>x.id===H.cat), s = HIST[H.cat];
+  const unit = c.u==="cab"?"US$/cab":c.u==="carc"?"US$/kg carcasa":"US$/kg en pie";
+  const dec = c.u==="cab"?0:2;
+  const d = s.d, first=d[0][1], last=d[d.length-1][1];
+  const vals = d.map(x=>x[1]); const mx=Math.max(...vals), mn=Math.min(...vals);
+  const varp = (last/first-1)*100;
+  $("hKpis").innerHTML = [
+    {k:"Último valor", v:"US$ "+fmt(last,dec), d:fd(d[d.length-1][0])},
+    {k:"Variación", v:(d.length>1?(varp>=0?"+":"")+fmt(varp,1)+"%":"—"), d:d.length>1?"desde "+fd(d[0][0]):"un solo dato"},
+    {k:"Máximo", v:"US$ "+fmt(mx,dec), d:fd(d[vals.indexOf(mx)][0])},
+    {k:"Mínimo", v:"US$ "+fmt(mn,dec), d:fd(d[vals.indexOf(mn)][0])}
+  ].map(x=>`<div class="kpi"><div class="k">${x.k}</div><div class="v">${x.v}</div><div class="d">${x.d}</div></div>`).join("");
+
+  // SVG
+  const W=760,Hh=300,pl=58,pr=18,pt=18,pb=38;
+  const t = d.map(x=>new Date(x[0]).getTime());
+  const t0=Math.min(...t), t1=Math.max(...t), span=Math.max(t1-t0,1);
+  let lo=mn, hi=mx; const pad=(hi-lo||hi*0.1)*0.25; lo-=pad; hi+=pad;
+  const X = v=> d.length===1 ? (pl+(W-pl-pr)/2) : pl+(v-t0)/span*(W-pl-pr);
+  const Y = v=> pt+(1-(v-lo)/(hi-lo))*(Hh-pt-pb);
+  let g="";
+  for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4, y=Y(v);
+    g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="#d6e7dd" stroke-dasharray="${i?"3 4":"0"}"/><text x="${pl-8}" y="${y+4}" text-anchor="end" font-size="12" fill="#5b7368">${fmt(v,dec)}</text>`;}
+  const ticks = d.length<=6 ? d.map(x=>x[0]) : [d[0][0], d[Math.floor(d.length/3)][0], d[Math.floor(2*d.length/3)][0], d[d.length-1][0]];
+  ticks.forEach(s=>{const x=X(new Date(s).getTime()); g+=`<text x="${x}" y="${Hh-12}" text-anchor="middle" font-size="12" fill="#5b7368">${fd(s)}</text>`;});
+  const pts = d.map(x=>[X(new Date(x[0]).getTime()),Y(x[1])]);
+  const line = pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const area = d.length>1 ? line+` L${pts[pts.length-1][0]},${Hh-pb} L${pts[0][0]},${Hh-pb} Z` : "";
+  const dots = pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="5.5" fill="#fff" stroke="#17573f" stroke-width="2.5" data-i="${i}" style="cursor:pointer"/>`).join("");
+  $("hChart").innerHTML = `<div class="tip" id="tip"></div><svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Precio de ${c.n} en el tiempo">
+    <defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2e9466" stop-opacity=".28"/><stop offset="1" stop-color="#2e9466" stop-opacity="0"/></linearGradient></defs>
+    ${g}<path d="${area}" fill="url(#ga)"/><path d="${line}" fill="none" stroke="#17573f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${dots}
+    <text x="${pl}" y="12" font-size="12" fill="#5b7368" font-weight="600">${unit}</text></svg>`;
+  const tip=$("tip"), box=$("hChart");
+  box.querySelectorAll("circle").forEach(cn=>{
+    const show=()=>{const i=+cn.dataset.i, r=box.getBoundingClientRect(), b=cn.getBoundingClientRect();
+      tip.innerHTML=`<b>US$ ${fmt(d[i][1],dec)}</b> · ${fd(d[i][0])}`; tip.style.left=(b.left-r.left+b.width/2)+"px"; tip.style.top=(b.top-r.top)+"px"; tip.style.opacity=1;};
+    cn.addEventListener("mouseenter",show); cn.addEventListener("click",show);
+    cn.addEventListener("mouseleave",()=>tip.style.opacity=0);
+  });
+  $("hNote").textContent = (s.f==="Referencia semanal"
+    ? "Fuente: precios de referencia semanales del mercado."
+    : "Fuente: promedios de remates por pantalla (pueden variar por calidad y peso de la oferta de cada remate).")
+    + (d.length<3?" Hay pocos datos para esta categoría; se irán sumando con cada actualización.":"");
+}
+
+function showTab(t){
+  $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $("vCalc").classList.toggle("hide",t!=="calc"); $("vCalc2").classList.toggle("hide",t!=="calc");
+  $("vHist").classList.toggle("hide",t!=="hist");
+  if(t==="hist") renderHist();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ============ ESTADO ============ */
+const S = {esp:"vac", cat:"ternero", raza:"Otra / general", cal:"Buena", mes:5};
+const $ = id => document.getElementById(id);
+const fmt = (n,d=0) => n.toLocaleString("es-UY",{minimumFractionDigits:d,maximumFractionDigits:d});
+const usd = (n,d=0) => "US$ " + fmt(n,d);
+const list = () => S.esp==="vac" ? VAC : OVI;
+const catObj = () => list().find(c=>c.id===S.cat);
+
+function renderCats(){
+  $("cats").innerHTML = list().map(c=>`<button class="cat ${c.id===S.cat?"on":""}" data-id="${c.id}"><b>${c.n}</b><span>${c.d}</span></button>`).join("");
+  $("cats").querySelectorAll(".cat").forEach(b=>b.onclick=()=>{S.cat=b.dataset.id; onCat(); });
+}
+function renderChips(el, arr, key){
+  $(el).innerHTML = arr.map(r=>`<button class="chip ${r.n===S[key]?"on":""}" data-n="${r.n}">${r.n}</button>`).join("");
+  $(el).querySelectorAll(".chip").forEach(b=>b.onclick=()=>{S[key]=b.dataset.n; renderChips(el,arr,key); calc();});
+}
+function renderMonths(){
+  $("months").innerHTML = [1,2,3,4,5,6,7,8,9].map(m=>`<button class="${m===S.mes?"on":""}" data-m="${m}">${m}</button>`).join("");
+  $("months").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.mes=+b.dataset.m; renderMonths(); calc();});
+  const m=S.mes;
+  $("mesHint").textContent = m>=8 ? `Preñez de ${m} meses · próxima a parir` : m<=3 ? `Preñez de ${m} meses · preñez temprana` : `Preñez de ${m} meses`;
+}
+function onCat(){
+  const c = catObj();
+  renderCats();
+  $("preWrap").classList.toggle("hide", !c.preg);
+  const porKg = c.u!=="cab";
+  $("pesoWrap").classList.toggle("hide", !porKg);
+  $("rendWrap").classList.toggle("hide", c.u!=="carc");
+  if(porKg && c.peso) $("peso").value = c.peso;
+  if(c.rend) $("rend").value = c.rend;
+  $("ownHint").textContent = c.u==="cab" ? "US$ por cabeza" : c.u==="carc" ? "US$/kg carcasa" : "US$/kg en pie";
+  $("own").value = "";
+  calc();
+}
+
+function curva(c, peso){
+  const k = CURVA[c.id];
+  if(!k || !peso) return 1;
+  const f = Math.pow(k[0]/peso, k[1]);
+  return Math.min(1.45, Math.max(0.72, f));
+}
+/* precio base por fuente, ajustado por la curva de peso */
+function srcPrice(c, s, peso){
+  const base = c.p[s];
+  if(base==null) return null;
+  return c.u==="kg" ? base*curva(c,peso) : base;
+}
+
+function calc(){
+  const c = catObj();
+  const cab = Math.max(0, +$("cab").value||0);
+  const peso = Math.max(0, +$("peso").value||0);
+  const rend = (+$("rend").value||50)/100;
+  const razas = S.esp==="vac"?RAZAS_VAC:RAZAS_OVI;
+  const fr = (razas.find(r=>r.n===S.raza)||{f:1}).f;
+  const fc = (CALIDAD.find(r=>r.n===S.cal)||{f:1}).f;
+  const fp = c.preg ? PREG[S.mes] : 1;
+  const com_ = leerComentario($("coment").value);
+  const fl = factorLote(cab);
+  const adj = fr*fc*fp*com_.f*fl;
+  const fw = c.u==="kg" ? curva(c,peso) : 1;
+  $("tags").innerHTML = com_.items.map(x=>`<span class="tag ${x.v>=0?"up":"dn"}">${x.v>=0?"▲":"▼"} ${x.t} ${x.v>=0?"+":""}${fmt(x.v,1)}%</span>`).join("");
+  const pct = f=>{const v=(f-1)*100; return `<b class="${v>=0?"up":"dn"}">${v>=0?"+":""}${fmt(v,1)}%</b>`;};
+  $("adjbox").innerHTML =
+    (c.u==="kg"?`<div class="r"><span>Curva de peso (${fmt(peso)} kg)</span>${pct(fw)}</div>`:"")+
+    `<div class="r"><span>Raza y calidad</span>${pct(fr*fc)}</div>`+
+    (c.preg?`<div class="r"><span>Preñez ${S.mes} meses</span>${pct(fp)}</div>`:"")+
+    `<div class="r"><span>Comentario del lote</span>${pct(com_.f)}</div>`+
+    `<div class="r"><span>Tamaño del lote (${fmt(cab)} cab.)</span>${pct(fl)}</div>`;
+  const own = parseFloat(($("own").value||"").toString().replace(",", "."));
+
+  // valor por cabeza por fuente
+  const rows = [];
+  Object.keys(SOURCES).forEach(s=>{
+    const p = srcPrice(c,s,peso);
+    if(p==null){ rows.push({s, v:null}); return; }
+    let perHead;
+    if(c.u==="cab") perHead = p*adj;
+    else if(c.u==="kg") perHead = p*peso*adj;
+    else perHead = p*peso*rend*adj;
+    rows.push({s, p:p*adj, v:perHead});
+  });
+  const ok = rows.filter(r=>r.v!=null);
+  let headAvg = ok.reduce((a,r)=>a+r.v,0)/(ok.length||1);
+  let unitAvg = ok.reduce((a,r)=>a+r.p,0)/(ok.length||1);
+  const min = Math.min(...ok.map(r=>r.v)), max = Math.max(...ok.map(r=>r.v));
+
+  let usingOwn = false;
+  if(!isNaN(own) && own>0){
+    usingOwn = true;
+    unitAvg = own;
+    headAvg = c.u==="cab" ? own : c.u==="kg" ? own*peso : own*peso*rend;
+  }
+  const total = headAvg*cab;
+
+  $("tLbl").textContent = usingOwn ? "Con tu precio" : `Promedio de ${ok.length} fuente${ok.length>1?"s":""}`;
+  $("tBig").textContent = usd(total);
+  $("tCab").textContent = usd(headAvg);
+  $("tKgW").style.display = c.u==="cab" ? "none" : "";
+  $("tKg").textContent = c.u==="cab" ? "—" : usd(unitAvg,2) + (c.u==="carc"?" carc.":"");
+  $("tKgs").textContent = c.u==="cab" ? "—" : fmt(peso*cab) + " kg";
+  $("tRange").textContent = (!usingOwn && ok.length>1) ? `Rango entre fuentes: ${usd(min*cab)} – ${usd(max*cab)}` : "";
+
+  // fuentes
+  const maxV = Math.max(...ok.map(r=>r.v),1);
+  $("srcList").innerHTML = rows.map(r=>{
+    const S0 = SOURCES[r.s];
+    if(r.v==null) return `<div class="srow"><div><div class="sname">${S0.name}</div><div class="sdate">${S0.date}</div></div><div class="sval na">Sin dato</div></div>`;
+    const unit = c.u==="cab" ? "por cabeza" : c.u==="carc" ? `${usd(r.p,2)}/kg carc.` : `${usd(r.p,2)}/kg`;
+    return `<div class="srow"><div><div class="sname">${S0.name}</div><div class="sdate">${S0.date}</div></div>
+      <div class="sval">${usd(r.v*cab)}<small>${c.u==="cab"?usd(r.v)+" "+unit:unit}</small></div>
+      <div class="bar"><i style="width:${(r.v/maxV*100).toFixed(0)}%"></i></div></div>`;
+  }).join("");
+
+  // roles
+  const com = (+$("com").value||0)/100, gas=(+$("gas").value||0)/100;
+  const comVal = total*com;
+  $("roles").innerHTML = `
+    <div class="r"><span>Valor bruto del lote</span><b>${usd(total)}</b></div>
+    <div class="r"><span>Vendedor / productor recibe (neto)</span><b>${usd(total*(1-com-gas))}</b></div>
+    <div class="r"><span>Comprador paga (con comisión ${fmt(com*100,2)}%)</span><b>${usd(total*(1+com))}</b></div>
+    <div class="r hl"><span>Comisión consignatario (por punta)</span><b>${usd(comVal)}</b></div>`;
+
+  const notes = [];
+  if(c.preg) notes.push(`Ajuste por preñez de ${S.mes} meses: ${fp>=1?"+":""}${fmt((fp-1)*100,0)}% sobre el promedio de remate.`);
+  if(c.u==="carc") notes.push(`Gordo: precio de referencia por kg carcasa × peso vivo × rendimiento ${fmt(rend*100,1)}%.`);
+  notes.push(`Los ajustes se combinan de forma no lineal: el kilo liviano vale más que el pesado y los comentarios suman con rendimiento decreciente (máximo ±22%). Valores de referencia, no cotización firme.`);
+  $("noteTxt").textContent = notes.join(" ");
+
+  window._summary = `🐂 CuántoLaVenta – ${c.n}\n${cab} cab.${c.u!=="cab"?` × ${peso} kg`:""} · ${S.raza} · ${S.cal}${c.preg?` · preñez ${S.mes} meses`:""}${com_.items.length?`\n📝 ${com_.items.map(x=>x.t).join(", ")}`:""}\nValor estimado: ${usd(total)} (${usd(headAvg)}/cab${c.u!=="cab"?`, ${usd(unitAvg,2)}/kg`:""})\n` +
+    rows.filter(r=>r.v!=null).map(r=>`• ${SOURCES[r.s].name}: ${usd(r.v*cab)}`).join("\n") + `\nPrecios al ${UPDATED}`;
+}
+
+/* Pizarra */
+function renderTable(){
+  const all = [...VAC.map(c=>({...c,esp:"Vacunos"})), ...OVI.map(c=>({...c,esp:"Ovinos"}))];
+  const head = `<tr><th>Categoría</th><th>Ref. semanal</th><th>Remate 1</th><th>Remate 2</th><th>Remate 3</th><th>Promedio</th></tr>`;
+  let lastEsp = "";
+  const body = all.map(c=>{
+    const d = c.u==="cab"?0:2;
+    const vals = ["ref","r1","r2","r3"].map(s=>c.p[s]);
+    const ok = vals.filter(v=>v!=null);
+    const avg = ok.reduce((a,b)=>a+b,0)/ok.length;
+    const unit = c.u==="cab"?"US$/cab":c.u==="carc"?"US$/kg carc.":"US$/kg";
+    let sep = "";
+    if(c.esp!==lastEsp){ lastEsp=c.esp; sep=`<tr><td colspan="6" style="font-weight:800;color:var(--g700);padding-top:16px">${c.esp}</td></tr>`; }
+    return sep + `<tr><td>${c.n} <span class="u">${unit}</span></td>${vals.map(v=>`<td>${v==null?'<span class="u">—</span>':fmt(v,d)}</td>`).join("")}<td><b>${fmt(avg,d)}</b></td></tr>`;
+  }).join("");
+  $("tbl").innerHTML = head + body;
+
+  const k = [
+    {k:"Ternero", v:"US$ "+fmt(avgOf(VAC[0]),2), d:"por kg · promedio 4 fuentes"},
+    {k:"Vaca de invernada", v:"US$ "+fmt(avgOf(VAC[8]),2), d:"por kg · promedio 4 fuentes"},
+    {k:"Vientre preñado", v:"US$ "+fmt(avgOf(VAC[9]),0), d:"por cabeza"},
+    {k:"Novillo gordo", v:"US$ "+fmt(VAC[15].p.ref,2), d:"por kg carcasa · ref. semanal"}
+  ];
+  $("kpis").innerHTML = k.map(x=>`<div class="kpi"><div class="k">${x.k}</div><div class="v">${x.v}</div><div class="d">${x.d}</div></div>`).join("");
+}
+function avgOf(c){ const v=Object.values(c.p); return v.reduce((a,b)=>a+b,0)/v.length; }
+
+/* Eventos */
+$("especie").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  $("especie").querySelectorAll("button").forEach(x=>x.classList.remove("on")); b.classList.add("on");
+  S.esp=b.dataset.v; S.cat = S.esp==="vac"?"ternero":"cordero";
+  S.raza = S.esp==="vac"?"Otra / general":"Cruza / general";
+  renderChips("razas", S.esp==="vac"?RAZAS_VAC:RAZAS_OVI, "raza");
+  if(S.esp==="ovi") $("cab").value = 100;
+  onCat();
+});
+const SUG=["destetados","castrados","muy parejos","buen estado","sanidad al día","mansos","algo de garrapata","flacos","cola de lote","desparejos"];
+$("sugg").innerHTML = SUG.map(s=>`<button type="button">+ ${s}</button>`).join("");
+$("sugg").querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{const t=$("coment"); t.value=(t.value.trim()?t.value.trim().replace(/[.,]$/,"")+", ":"")+SUG[i]; calc();});
+["cab","peso","rend","com","gas","own","coment"].forEach(id=>$(id).addEventListener("input",calc));
+$("copyBtn").onclick = async()=>{
+  try{ await navigator.clipboard.writeText(window._summary); $("copyBtn").textContent="¡Copiado!"; }
+  catch(e){ $("copyBtn").textContent="No se pudo copiar"; }
+  setTimeout(()=>$("copyBtn").textContent="Copiar resumen",1600);
+};
+$("waBtn").onclick = ()=>{ const a=document.createElement("a"); a.href="https://wa.me/?text="+encodeURIComponent(window._summary); a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); };
+
+$("updTxt").textContent = "Precios actualizados al " + UPDATED;
+renderChips("razas", RAZAS_VAC, "raza");
+renderChips("calidad", CALIDAD, "cal");
+renderMonths();
+renderTable();
+onCat();
+$("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>showTab(b.dataset.t));
+$("hEsp").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  $("hEsp").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  H.esp=b.dataset.v; H.cat=(H.esp==="vac"?VAC:OVI)[0].id; renderHist();});
+$("toHist").onclick=()=>{H.esp=S.esp; H.cat=S.cat;
+  $("hEsp").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===H.esp)); showTab("hist");};
+</script>
+</body>
+</html>
